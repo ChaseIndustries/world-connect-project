@@ -1,0 +1,7 @@
+<?php
+function profile_unlock_system_info_alter(&$info, $file, $type) {
+  if ($type == 'module' && $file->name == 'profile') {
+    $info['hidden'] = FALSE;
+  }
+}
+?>
