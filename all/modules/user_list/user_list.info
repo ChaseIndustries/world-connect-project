@@ -1,5 +1,0 @@
-name = User List
-description = Lists users
-core = 7.x
-files[] = user_list.module
-scripts[] = user_list.js

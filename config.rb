@@ -2,17 +2,23 @@ require 'compass/import-once/activate'
 # Require any additional compass plugins here.
 
 # Set this to the root of your project when deployed:
-http_path = "/"
-css_dir = "all/themes/bootstrap/wcp/css"
-sass_dir = "all/themes/bootstrap/wcp/sass"
-images_dir = "all/themes/bootstrap/wcp/images"
-javascripts_dir = "all/themes/bootstrap/wcp/js"
-fonts_dir = "all/themes/bootstrap/wcp/fonts"
+# http_path = "/"
+# css_dir = "all/themes/wcp/css"
+# sass_dir = "all/themes/wcp/sass"
+# images_dir = "all/themes/wcp/images"
+# javascripts_dir = "all/themes/wcp/js"
+# fonts_dir = "all/themes/wcp/fonts"
 
-output_style = :nested
+# http_path = "/"
+css_dir = "all/modules/user_list"
+sass_dir = "all/modules/user_list"
+images_dir = "all/themes/wcp/images"
+javascripts_dir = "all/themes/wcp/js"
+fonts_dir = "all/themes/wcp/fonts"
 
-# To enable relative paths to assets via compass helper functions. Uncomment:
- relative_assets = true
+output_style = :compact
+
+relative_assets = true
 
 # To disable debugging comments that display the original location of your selectors. Uncomment:
 # line_comments = false
