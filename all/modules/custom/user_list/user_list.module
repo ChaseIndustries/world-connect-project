@@ -21,10 +21,23 @@ function user_list_theme($existing, $type, $theme, $path){
 
 function user_list_preprocess_views_view(&$vars){
   $view = $vars["view"];
-  if($view->name == "list_users"){
+  if($view->name == "list_users" && count($view->result)){
+    $users = array();
+    foreach($view->result as $result){
+      $users[] = user_load($result->uid);
+    }
     $existing = array_key_exists("user_data",$GLOBALS) ? $GLOBALS["user_data"] : array();
-    $result = array_merge($existing,$view->result);
+    $result = array_merge($existing,$users);
     $GLOBALS["user_data"] = $result;
   }
 }
+
+function user_list_block_info(){
+  $blocks["map"] = array(
+    "info" => t("User List Map")
+  );
+  
+  return $blocks;
+}
+
 ?>

@@ -2,8 +2,9 @@ var UserList = function($){
 
 	/* vars */
 	var map,
+	self = this,
 	classes = {
-		list:($(".view-list-users.view-display-id-logged_in").length ? ".view-list-users.view-display-id-logged_in":".view-list-users.view-display-id-logged_out"),
+		list:".view-list-users",
 		inner:".view-inner",
 		node:".views-row"
 	},
@@ -14,35 +15,17 @@ var UserList = function($){
 	initmap();
 	initUserNodes();
 	
-	/* listeners */
-	$(classes.node).hover(function(){
-  	$(this).find(".person-wrapper").addClass("active");
-	}, function(){
-	  if(!$(this).hasClass("current-user")){
-  	  $(this).find(".person-wrapper").removeClass("active");
-	  }
-	})
-	/**
-	 * Scroll the main list sideways instead of vertical
-	 **/
-	 $container.mousewheel(function(e,delta){
- 	   //scrollPane.scrollByX(-delta*100);
-		 scrollPane.scrollByX(-delta*8);
-		 e.preventDefault();
-	 })
-	 $(".fields").mousewheel(function(e){
-  	 e.stopPropagation();
-	 })
+
 
 	/* functions */
-	this.goToCurrentUser = function(){
+	self.goToCurrentUser = function(){
 	  $user = $(".current-user");
 	  if($user.length){
-	  setTimeout(function(){
-  	   scrollPane.scrollTo($user.offset().left+(.5*$user.width())-(.5*width));
-	  },300)
-  	 
+	    setTimeout(function(){
+  	    scrollPane.scrollTo($user.offset().left+(.5*$user.width())-(.5*width));
+       },300);
   	}
+  	return false;
 	}
 	function adjustScreen(){
 		var h2 = $("window").height();
@@ -52,34 +35,35 @@ var UserList = function($){
 	function initmap(){
 		/* 365,222 feet in 1 degree of latitude */
 		var style = [
-		  {
-		    featureType: "all",
-		    elementType: "labels",
-		    stylers: [
-		      { visibility: "off" }
-		    ]
-		  },
-		  {
-		    featureType: "road",
-		    elementType: "all",
-		    stylers: [
-		      { visibility: "off" }
-		    ]
-		  },
-		  {featureType:"landscape",
-		  elementType:"all",
-		  stylers:[{hue:70}]
-		  }  ,
-		  {featureType:"all",
-		  elementType:"all",
-		  stylers:[{lightness:-20}]
-		  },
-		    {featureType:"water",
-		  elementType:"all",
-		  stylers:[{lightness:80}]
-		  }
-		]
-		var mapOptions = {
+    {
+      "featureType": "landscape.man_made",
+      "stylers": [
+        { "visibility": "off" }
+      ]
+    },{
+      "featureType": "poi",
+      "stylers": [
+        { "visibility": "off" }
+      ]
+    },{
+      "featureType": "water",
+      "stylers": [
+        { "color": "#26B65F" }
+      ]
+    },{
+      "featureType": "landscape.natural",
+      "stylers": [
+        { "saturation": 16 },
+        { "color": "#95E2E5" },
+        { "lightness": 24 }
+      ]
+    },{
+      "featureType": "administrative",
+      "stylers": [
+        { "visibility": "off" }
+      ]
+    }];
+    	var mapOptions = {
 		  center: new google.maps.LatLng(0,0),
 		  zoom: 4,
 		 /* mapTypeId: google.maps.MapTypeId.SATELLITE,*/
@@ -101,21 +85,58 @@ var UserList = function($){
 	}
 	
 	function positionUsers(){
-		var w = parseInt($(classes.list).find(classes.node).outerWidth())// + parseInt($(classes.node).css("margin-left"));
+		var w = parseInt($(classes.list).find(classes.node).outerWidth());
 		var n = $(classes.list).find(classes.node).length;
-		var totalWidth = w*n;
+		var totalWidth = w*n + + parseInt($(classes.list).css("padding-left"));
 		$(classes.list).find(classes.inner+":first").width(totalWidth);
 		scrollPane = $(classes.list).jScrollPane({verticalGutter:8,animateScroll:true}).data('jsp');	
 	}
+	
+	function colorUsers(){
+  	$.each(user_data,function(i,v){
+    	var uid = v.uid, 
+    	attributes = {};
+    	//loop through fields
+      $.each(v, function(key,field){
+        if(key.indexOf("field_") != -1){
+          if(typeof(field["und"]) == "object"){
+            if(typeof(field["und"][0]["rgb"]) == "string"){
+              attributes[key] = field["und"][0]["rgb"];
+            }
+          }
+        }
+      });
+    	var el = $(".person[rel='"+uid+"']"),
+    	image = el.find(".person__svg").get(0);
+    	el.addClass("visible");
+    	image.addEventListener("load", function(){
+/*
+    	  var svgDoc = image.contentDocument;
+    	  $.each(attributes, function(i, attribute){
+    	    if(attribute){
+    	      var sect = svgDoc.getElementById(i);
+            $(sect).attr("fill",attribute).children().attr("fill",attribute);
+          }
+    	  });
+*/
+    	  el.addClass("visible");
+    	});
+  	});
+	} 
+	 
 	function initUserNodes(){
-		/*  find width of the nodes */
+		//  find width of the nodes
 		adjustScreen();
 		positionUsers();
+		colorUsers();
 		
-		var armSpan = 6 /* in feet */, userLines = [],startPoint=0,endPoint=0;
+		var armSpan = 5.5 /* in feet */, userLines = [],startPoint=0,endPoint=0;
 		var armSpanMiles = armSpan/365222;
 		
-		if(typeof(user_data) == "undefined"){ return false; }
+		if(typeof(user_data) == "undefined" || !$("#map").length || typeof(google) == "undefined"){ 
+		  console.log("Something went wrong"); 
+		  return false;
+		}
 		var geocoder = new google.maps.Geocoder();
 		for(var i in user_data){
 		 //stopgap because of google maps api request limit
@@ -177,8 +198,8 @@ var UserList = function($){
 window.onload = function(){
 	var $ = jQuery.noConflict();
 	if(typeof(user_data)=="undefined"){
-  	//console.log(user_data);
-  	throw("Did not get user data!")
+  	console.log("Did not get user data!");
+  	return false;
 	}
 	var user_list = new UserList($);
 	user_list.goToCurrentUser();

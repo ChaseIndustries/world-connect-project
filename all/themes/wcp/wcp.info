@@ -9,8 +9,7 @@ base theme = bootstrap
 ;;;;;;;;;;;;;;;;;;;;;
 
 regions[navigation]     = 'Navigation'
-regions[header]         = 'Top Bar'
-regions[user_login]     = 'User Login / Registration'
+regions[header]         = 'Top Bar' 
 regions[highlighted]    = 'Highlighted'
 regions[help]           = 'Help'
 regions[content]        = 'Content'
@@ -25,8 +24,13 @@ regions[page_bottom]    = 'Page bottom'
 ;; Stylesheets
 ;;;;;;;;;;;;;;;;;;;;;
 
-stylesheets[all][] = css/style.css
 
+stylesheets[all][] = css/vendor/bootstrap.min.css
+stylesheets[all][] = css/vendor/bootstrap-colorpicker.css
+stylesheets[all][] = css/base.css
+stylesheets[all][] = css/layout.css
+stylesheets[all][] = css/component.css
+stylesheets[all][] = css/modifiers.css
 
 ; For information on choosing the desired method, please read the Drupal
 ; Bootstrap sub-theme "how-to" documentation:
@@ -39,11 +43,13 @@ stylesheets[all][] = css/style.css
 ; ;;;;;;;;;;;;;;;;;;;;;
 ; ;; Scripts
 ; ;;;;;;;;;;;;;;;;;;;;;
-; 
-scripts[] = js/connect.js
+
+scripts[] = js/vendor/bootstrap.min.js
+scripts[] = js/vendor/bootstrap-colorpicker.min.js
+
 ;
 ; ; Disable BootstrapCDN if using Bootstrap source files in your sub-theme.
-; settings[bootstrap_cdn] = ''
+settings[bootstrap_cdn] = ''
 
 
 ; ;-------------------------

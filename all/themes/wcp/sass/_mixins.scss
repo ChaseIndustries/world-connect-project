@@ -1,0 +1,108 @@
+//
+//  SASS MIXINS (Helpers)
+//
+ 
+//padding helpers
+@mixin padding-top-bottom($amount : $spacing){
+  padding-top:$amount;
+  padding-bottom:$amount;
+}
+
+//margin helpers
+@mixin margin-top-bottom($amount : $spacing){
+  margin-top:$amount;
+  margin-bottom:$amount;
+}
+
+//positioning helpers
+@mixin absolute-center($width : null, $height : null){
+  position:absolute;
+  left:50%;
+  top:50%;
+  @if $width {
+    margin-left:-.5 * $width;
+  } @else {
+    @include translateX(-50%);
+  }
+  @if $height {
+    margin-top:-.5 * $height
+  } @else {
+    @include translateY(-50%);
+  }
+}
+@mixin absolute-x($width : null){
+  position:absolute;
+  left:50%;
+  @if $width {
+    margin-left:-.5 * $width;
+  } @else {
+    @include translateX(-50%);
+  }
+}
+@mixin absolute-y($height : null){
+  position:absolute;
+  top:50%;
+  @if $height {
+    margin-top:-.5 * $height
+  } @else {
+    @include translateY(-50%);
+  }
+}
+@mixin center() {
+  margin-left:auto;
+  margin-right:auto;
+}
+
+//borders & corners
+@mixin rounded(){
+  @include border-radius($radius);
+}
+
+//shapes
+@mixin arrow-up($size : 10px, $color : #000) {
+	width: 0; 
+	height: 0; 
+	border-left: $size solid transparent;
+	border-right: $size solid transparent;
+	border-bottom-width:$size;
+	border-bottom-style:solid;
+	border-bottom-color:$color;
+	display:inline-block;
+	content:"";
+}
+
+@mixin arrow-down($size : 10px, $color : #000) {
+	width: 0; 
+	height: 0; 
+	border-left: $size solid transparent;
+	border-right: $size solid transparent;	
+	border-top-width:$size;
+	border-top-style:solid;
+	border-top-color:$color;
+	display:inline-block;
+	content:"";
+}
+
+@mixin arrow-right($size : 10px, $color : #000) {
+	width: 0; 
+	height: 0; 
+	border-top: $size solid transparent;
+	border-bottom: $size solid transparent;
+	border-left-width:$size;
+	border-left-style:solid;
+	border-left-color:$color;
+	display:inline-block;
+	content:"";
+}
+
+@mixin arrow-left($size : 10px, $color : #000) {
+	width: 0; 
+	height: 0; 
+	border-top: $size solid transparent;
+	border-bottom: $size solid transparent; 
+	border-right-width:$size;
+	border-right-style:solid;
+	border-right-color:$color;
+	display:inline-block;
+	content:"";
+}

@@ -16,9 +16,3 @@ function user_list_views_query_alter(&$view, &$query) {
     }
   }
 }
-
-function user_list_views_post_render(&$view){
-  if($view->name == "list_users"){
-   //modify to attach the attachment with the main rows
-  }
-}

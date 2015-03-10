@@ -74,40 +74,41 @@
  */
 ?>
 
-<div ng-app="connect" class="container-fluid wrapper">
-<?php print $messages; ?>
-	<?php if (!empty($primary_nav) || !empty($secondary_nav) || !empty($page['navigation'])): ?>
-      <div class="navbar">
-        <nav role="navigation">
-          <?php if (!empty($primary_nav)): ?>
-            <?php print render($primary_nav); ?>
-          <?php endif; ?>
-          <?php if (!empty($secondary_nav)): ?>
-            <?php print render($secondary_nav); ?>
-          <?php endif; ?>
-          <?php if (!empty($page['navigation'])): ?>
-            <?php print render($page['navigation']); ?>
-          <?php endif; ?>
-        </nav>
-      </div>
-    <?php endif; ?>
-	<div class="inner-wrapper">
+<div class="wrapper">
+  <div class="inner-wrapper container">
+  <?php print $messages; ?>
+  	<?php if (!empty($primary_nav) || !empty($secondary_nav) || !empty($page['navigation'])): ?>
+        <div class="nav">
+          <div class="nav__inner">
+            <?php if (!empty($primary_nav)): ?>
+              <?php print render($primary_nav); ?>
+            <?php endif; ?>
+            <?php if (!empty($secondary_nav)): ?>
+              <?php print render($secondary_nav); ?>
+            <?php endif; ?>
+            <?php if (!empty($page['navigation'])): ?>
+              <?php print render($page['navigation']); ?>
+            <?php endif; ?>
+          </div>
+        </div>
+      <?php endif; ?>
+  </div>
 <? if(!$logged_in){ ?>
-		<div class="login col-md-2">
-      <? render($page["user_login"]); ?>
+		<div class="login-register">
+		  <a class="login-register__toggle js__login-register__toggle"></a>
+		  <div clas="login-register__inner">
+		    <div class="col-sm-6 login-register__login">
+          <? //print(drupal_render(drupal_get_form('user_login_block'))); ?>
+		    </div>
+		    <div class="col-sm-6 login-register__register">
+		    <? //print(drupal_render(drupal_get_form('user_register_form'))); ?>
+		    </div>
+		  </div>
 		</div>
 <? } ?>
-<div class="scroll-area"></div>
-		<?php print render($page['content']); ?>
 	</div>
 	<script>
 	var theme_dir = "<?=$theme_dir?>";
 	</script>
 	<div class="front-map container-fluid"><div id="map"></div></div>
-	<?php if (!empty($page['sidebar_second'])): ?>
-      <aside class="col-sm-3" role="complementary">
-        <?php print render($page['sidebar_second']); ?>
-      </aside>  <!-- /#sidebar-second -->
-    <?php endif; ?>
-
-</div>
+  <?php print render($page['content']); ?>

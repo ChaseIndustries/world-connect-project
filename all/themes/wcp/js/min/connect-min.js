@@ -1,0 +1,1 @@
+!function($){$(".field-type-color-field-rgb input").colorpicker(),$(".field-type-color-field-rgb input").on("keypress",function(e){return e.preventDefault(),!1})}(jQuery);

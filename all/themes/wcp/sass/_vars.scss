@@ -1,9 +1,19 @@
+@import "compass";
+@import "mixins";
+
+/*
+ * Bootstrap Breakpoints
+ */
+ $break-xs : 768px;
+ $break-sm : 960px;
+ $break-md : 1200px;
+
 /**
  * Font Sizes
  */
-$h1 : 4rem;
-$h2 : 3rem;
-$h3 : 2rem;
+$h1 : 1.8em;
+$h2 : 1.5em;
+$h3 : 1.2em;
 
 
 
@@ -14,3 +24,25 @@ $h3 : 2rem;
 
 $ltGrey : #ccc;
 $dkGrey : #5a5a5a;
+$near-black : #191919;
+$base :  #26B65F;
+$highlight-1 : #95E2E5;
+$highlight-2 : #FFB800;
+$dark-1 : darken($base,20%);
+
+
+//
+// Arbitrary Values
+//
+$spacing:15px;
+
+//
+// Custom mixins
+//
+@mixin _box-shadow {
+  @include box-shadow(-2px 1px 0px darken($base,20%));
+}
+
+@mixin _text-shadow {
+  @include text-shadow(-2px 1px 0px darken($base,20%));
+}

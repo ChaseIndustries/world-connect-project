@@ -1,0 +1,7 @@
+@import "vars";
+
+h1 {
+  color:#FFB800;
+  font-size:1.8em;
+  @include _text-shadow();
+}

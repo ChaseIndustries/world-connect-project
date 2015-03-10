@@ -1,0 +1,4 @@
+name = Map
+description = Shows a block of a map
+core = 7.x
+files[] = map.module
