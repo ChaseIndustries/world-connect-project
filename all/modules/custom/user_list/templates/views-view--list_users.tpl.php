@@ -48,8 +48,18 @@
       <?php if ($attachment_after): ?>
         <?php print $attachment_after; ?>
       <?php endif; ?>
+      <div>
+      <div class="view-more"><a href="javascript:;"><img width="100%" src="/sites/all/themes/wcp/images/arrow.svg" /></a></div>
+      </div>
     </div>
   </div>
+    <?php if ($pager): ?>
+    <?php print $pager; ?>
+  <?php endif; ?>
+  <?php if ($more): ?>
+    <?php print $more; ?>
+  <?php endif; ?>
+  
   <?php endif; ?>
   <?php if ($footer): ?>
     <div class="view-footer">
@@ -58,10 +68,11 @@
   <?php endif; ?>
 </div><?php /* class view */ ?>
 <?php 
-if($GLOBALS["user_data"]): ?>
+if($GLOBALS["user_data"]): 
+?>
 <script>
-<!--
+var totalRows = <?php echo json_encode($GLOBALS["total_rows"]); ?>;
+totalRows.<?=$view->current_display?> = <?=$view->total_rows ?>;
 var user_data = <?php echo json_encode($GLOBALS["user_data"]); ?>;
--->
 </script>
 <?php endif; ?>

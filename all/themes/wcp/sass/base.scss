@@ -1,7 +1,41 @@
 @import "vars";
 
+html,body {
+  font-family:$sans;
+  color:$text;
+}
+
 h1 {
   color:#FFB800;
   font-size:1.8em;
   @include _text-shadow();
+  &.page-header {
+    border:none;
+  }
+}
+
+h2, .h2 {
+  font-size:1.4em;
+}
+
+h3,.h3 {
+  font-size:1.2em;
+}
+
+h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
+   font-family:$headings;
+}
+
+a {
+  &,&:hover,&:focus {
+    color:#fff;
+  }
+}
+
+label {
+  font-size:.9em;
+  text-transform: uppercase;
+  font-weight: normal;
+  font-family:$headings;
+  color:$highlight-2;
 }

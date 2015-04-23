@@ -75,33 +75,27 @@
 ?>
 
 <div class="wrapper">
-  <div class="inner-wrapper container">
+  <div class="messages-container">
   <?php print $messages; ?>
-  	<?php if (!empty($primary_nav) || !empty($secondary_nav) || !empty($page['navigation'])): ?>
-        <div class="nav">
-          <div class="nav__inner">
-            <?php if (!empty($primary_nav)): ?>
-              <?php print render($primary_nav); ?>
-            <?php endif; ?>
-            <?php if (!empty($secondary_nav)): ?>
-              <?php print render($secondary_nav); ?>
-            <?php endif; ?>
-            <?php if (!empty($page['navigation'])): ?>
-              <?php print render($page['navigation']); ?>
-            <?php endif; ?>
-          </div>
-        </div>
-      <?php endif; ?>
-  </div>
-<? if(!$logged_in){ ?>
-		<div class="login-register">
-		  <a class="login-register__toggle js__login-register__toggle"></a>
-		  <div clas="login-register__inner">
-		    <div class="col-sm-6 login-register__login">
-          <? //print(drupal_render(drupal_get_form('user_login_block'))); ?>
-		    </div>
-		    <div class="col-sm-6 login-register__register">
-		    <? //print(drupal_render(drupal_get_form('user_register_form'))); ?>
+   </div>
+<? 
+global $user;
+if(!$logged_in || in_array('administrator', array_values($user->roles))){ ?>
+		<div class="login-register modal">
+		  <div class="modal__inner">
+		    <div class="modal__content">
+		      <h2>Join the Chain</h2>
+		      <div class="row">
+    		    <div class="col-sm-6 login-register__login">
+    		      <? $user_login_form = drupal_get_form('user_login_block'); ?>
+              <? print(drupal_render($user_login_form)); ?>
+    		    </div>
+    		    <div class="col-sm-6 login-register__register">
+    		    <? $register_form = drupal_get_form('user_register_form'); ?>
+    		    <? print(drupal_render($register_form)); ?>
+    		    </div>
+  		    </div>
+  		    <div class="clearfix"></div>
 		    </div>
 		  </div>
 		</div>
@@ -111,4 +105,24 @@
 	var theme_dir = "<?=$theme_dir?>";
 	</script>
 	<div class="front-map container-fluid"><div id="map"></div></div>
-  <?php print render($page['content']); ?>
+	<div class="content-wrapper">
+    <?php print render($page['content']); ?>
+    <!--
+<div class='view-list-users'>
+      <div class='view-inner'>
+        <div class='view-content'>
+        <div class="view-more"><a href="javascript:;"><img width="100%" src="/sites/all/themes/wcp/images/arrow.svg" /></a></div>
+          <div class='views-row initial'>
+            <div class="person">
+              <div class='person__body'>
+                <img src="/sites/all/themes/wcp/images/people/man.svg" class='person__svg'/>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+-->
+	</div>
+  <footer class="container footer">
+    <?php print render($page['footer']); ?>
+  </footer>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="218.116px" height="229.693px" viewBox="0 0 218.116 229.693" enable-background="new 0 0 218.116 229.693"
+	 xml:space="preserve">
+<polygon fill="#146233" points="197.812,49.977 176.771,28.936 147.836,0 147.836,26.944 9.269,17.403 9.47,123.158 
+	147.836,113.102 147.836,140.562 177.447,110.95 197.89,90.508 218.116,70.281 "/>
+<polyline fill="#146233" points="147.836,26.944 9.269,17.403 9.47,123.158 147.836,113.102 147.836,140.562 177.447,110.95 
+	197.89,90.508 218.116,70.281 197.812,49.977 176.771,28.936 "/>
+<polyline fill="#24A04D" points="18.927,24.997 19.774,35.167 136.494,43.855 136.494,33.277 "/>
+<polyline fill="#24A04D" points="209,68.166 199.49,58.41 178.449,37.37 156.654,15.575 157.566,21.78 182.657,46.279 
+	203.698,67.319 "/>
+<radialGradient id="SVGID_1_" cx="107.9014" cy="220.75" r="94.3086" gradientTransform="matrix(1.0932 0 0 0.1193 -13.0827 194.4083)" gradientUnits="userSpaceOnUse">
+	<stop  offset="0" style="stop-color:#000000;stop-opacity:0.6"/>
+	<stop  offset="1" style="stop-color:#000000;stop-opacity:0"/>
+</radialGradient>
+<ellipse fill="url(#SVGID_1_)" cx="104.877" cy="220.75" rx="104.877" ry="8.943"/>
+</svg>

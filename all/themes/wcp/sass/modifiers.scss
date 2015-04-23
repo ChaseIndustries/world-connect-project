@@ -1,1 +1,41 @@
 @import "vars";
+
+.smaller {
+  font-size:65%;
+}
+
+.bigger {
+  font-size:125%;
+}
+
+.margin-top {
+  margin-top:$spacing;
+}
+
+.margin-bottom {
+  margin-bottom:$spacing;
+}
+
+.margin-left {
+  margin-left:$spacing;
+}
+
+.margin-right {
+  margin-right:$spacing;
+}
+
+.padding-top {
+  padding-top:$spacing;
+}
+
+.padding-bottom {
+  padding-bottom:$spacing;
+}
+
+.padding-left {
+  padding-left:$spacing;
+}
+
+.padding-right {
+  padding-right:$spacing;
+}

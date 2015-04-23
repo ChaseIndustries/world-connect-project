@@ -1,4 +1,10 @@
 <?php
+/*
+
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+*/
+
 
 drupal_add_js(drupal_get_path('module', 'user_list') .'/user_list.js');
 drupal_add_js('https://maps.googleapis.com/maps/api/js?key=AIzaSyAtwq1zUmBanBSj6mp3UyI7SNjTC5dNjuc','external');
@@ -15,7 +21,13 @@ function user_list_views_api() {
  */
 function user_list_theme($existing, $type, $theme, $path){
   return array(
-    "preprocess functions"=>array("user_list_preprocess_views_view")	
+    "preprocess functions"=>array("user_list_preprocess_views_view"),
+    "man_svg" => array(
+      'template' => '/templates/man_svg',
+      'variables' => array(
+        'user' => NULL,
+      ),
+    ),
   );
 }
 
@@ -30,6 +42,8 @@ function user_list_preprocess_views_view(&$vars){
     $result = array_merge($existing,$users);
     $GLOBALS["user_data"] = $result;
   }
+  //add total rows for the front end
+  $GLOBALS["total_rows"][$view->current_display] = $view->total_rows;
 }
 
 function user_list_block_info(){
@@ -39,5 +53,113 @@ function user_list_block_info(){
   
   return $blocks;
 }
+
+/**
+ * Implements hook_menu().
+ */
+ 
+function user_list_menu() {
+  $items['ajax/nextusers'] = array(
+    'page callback' => 'user_list_get_next_users',
+    'type' => MENU_CALLBACK,
+    'access arguments' => array('access content'),
+  );
+  $items['ajax/prevusers'] = array(
+    'page callback' => 'user_list_get_prev_users',
+    'type' => MENU_CALLBACK,
+    'access arguments' => array('access content'),
+  );
+  $items['svg/user/%'] = array(
+    'page callback' => 'user_list_generate_svg',
+    'type' => MENU_CALLBACK,
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+  );
+  return $items;
+}
+
+/**
+ * Callback to return JSON encoded image for given nid.
+ */
+function user_list_get_next_users($page = 0, $amount = 20) {
+
+  $view = views_get_view("list_users");
+  
+  if(user_is_logged_in()){
+   //load the attachment
+   $view->set_display("uids_more");
+   $view->set_offset($page * $amount);
+   
+  } else {
+    $view->set_display("list_users");
+    $view->set_current_page($page);
+  }
+  
+  $view->set_items_per_page($amount);
+  
+  user_list_print_result($view);
+}
+
+function user_list_get_prev_users($page = 0, $amount = 20) {
+  $view = views_get_view("list_users");
+  
+  if(user_is_logged_in()){
+   //load the attachment
+   $view->set_display("uids_less");
+   $view->set_offset($page * $amount);
+   
+  } else {
+    $view->set_display("list_users");
+    $view->set_current_page($page);
+  }
+  
+  $view->set_items_per_page($amount);
+
+  user_list_print_result($view);
+}
+
+function user_list_print_result($view){
+  $view->pre_execute();
+  $view->execute();
+  $result = array(
+    "users"      => array(),
+    "totalItems" => $view->total_rows, 
+    "itemsLeft"  => $view->total_rows - count($view->result)
+  );
+  $result["accounts"] = array();
+  
+  foreach($view->result as $row){
+    $user = user_load($row->users_uid);
+    $user_markup = user_view($user, "person");
+    $user->html = drupal_render($user_markup);
+    $result["accounts"][] = $user;
+  }
+  
+  echo json_encode($result);
+  die();
+}
+
+function user_list_page_build(&$page) {
+  $path = current_path();
+  $pos = strpos($path, "svg/user");
+  if ($pos === 0) {
+    //only print the markup
+    drupal_add_http_header('Content-type', 'image/svg+xml');
+    die($page["content"]["system_main"]["main"]["#markup"]);
+  }
+} 
+
+
+function user_list_generate_svg($uid = NULL){
+  //$user = user_load($uid);
+  // Load up the properties from the node table.
+  $nids = array($uid);
+  $sql = 'SELECT * FROM {users} WHERE uid IN (:nids)';
+  $users = db_query($sql, array(':uids' => $nids))->fetchAllAssoc('uid');
+  // Attach the single field to all nodes.
+  field_attach_load('user', $users[0], FIELD_LOAD_CURRENT);
+  return theme('man_svg', array('user' => $users[0]) );
+}
+
 
 ?>

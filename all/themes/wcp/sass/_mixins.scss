@@ -19,15 +19,18 @@
   position:absolute;
   left:50%;
   top:50%;
-  @if $width {
+  @if $width and not($height) {
     margin-left:-.5 * $width;
-  } @else {
+  } @else if not($height) {
     @include translateX(-50%);
   }
-  @if $height {
-    margin-top:-.5 * $height
-  } @else {
+  @if $height and not($width) {
+    margin-top:-.5 * $height;
+  } @else if not($width) {
     @include translateY(-50%);
+  }
+  @if not($height) and not($width) {
+    @include translate3d(-50%, -50%, 0);
   }
 }
 @mixin absolute-x($width : null){
@@ -105,4 +108,15 @@
 	border-right-color:$color;
 	display:inline-block;
 	content:"";
+}
+
+//
+// Custom mixins
+//
+@mixin _box-shadow {
+  @include box-shadow(0px 1px 0px darken($base,20%));
+}
+
+@mixin _text-shadow {
+  @include text-shadow(0px 1px 0px darken($base,20%));
 }

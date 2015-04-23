@@ -19,7 +19,8 @@ $dkGrey : #5a5a5a;
 $near-black:#191919;
 .view-list-users  {
 	
-	&.view-display-id-logged_in {
+	/*
+&.view-display-id-logged_in {
 	  
 	  width:100%;
     min-height:100%;
@@ -41,6 +42,27 @@ $near-black:#191919;
 		@include inline-block;
 		vertical-align: bottom;
 	}
+*/
+  .view-more {
+    display:inline-block;
+    width:100%;
+    right:15px;
+    height:100%;
+    margin-top:85%;
+    position:relative;
+    @include opacity(0);
+    @include transition(1s all ease-in);
+    margin-left:30px;
+    &.faded {
+      opacity:0 !important;
+    }
+    &.disabled {
+      @include scale(0);
+    }
+  }
+  .slick-slide .view-more {
+    @include opacity(1);
+  }
 	.person-wrapper {
 		width:384px;
 		position:relative;
@@ -48,9 +70,9 @@ $near-black:#191919;
 		margin-left:-30px;
 		padding-top:208px;
 		&.active {
-				.fields {
-          @include opacity(1);
-				}
+			.fields {
+        @include opacity(1);
+			}
 		}
 		.fields {
 		    color:$near-black;

@@ -1,8 +1,6 @@
 @import "vars";
 
-html, body { 
-  height: 100%;
-  background:$base;
+html, body {
   color:#fff;
   font-size:28px;
   @media(max-width:$break-xs){
@@ -11,4 +9,59 @@ html, body {
 }
 .wrapper {
   position:relative;
+}
+
+.content-wrapper {
+  background:$base;
+  position: relative;
+  z-index:1;
+  margin-top:$map-height;
+  // needs latest Compass, add '@import "compass"' to your scss
+  @include filter-gradient($base, #000000, vertical); // IE6-8
+  @include background-image(linear-gradient(top,  $base 0%,#fff 68%));
+}
+
+body.toolbar .front-map #map {
+  margin-top:32px;
+}
+
+body.toolbar-drawer .front-map #map {
+  margin-top:64px;
+}
+
+header#navbar {
+  background:transparent;
+  &, a {
+    color:$text;
+    font-size:.8em;
+    border-bottom:0;
+  }
+  nav {
+    float:right;
+    font-weight:lighter;
+  }
+}
+
+footer.footer {
+  font-size:.5em;
+  color:$text;
+  @include padding-top-bottom();
+  padding-top:50px;
+  text-align: right;
+}
+
+.front {
+  .footer {
+  color:darken($base,10%);
+  }
+}
+
+.main-container {
+  background:#fff;
+  color:$near-black;
+  padding-top:$spacing;
+  padding-bottom:$spacing;
+  a {
+    color:$dark-1;
+  }
 }

@@ -4,84 +4,114 @@
 /**
  * Colors
  */
-.view-list-users.view-display-id-logged_in {
-  width: 100%;
-  min-height: 100%;
-  z-index: 0;
-  overflow-y: hidden;
-  overflow-x: auto;
-  white-space: nowrap; }
-  .view-list-users.view-display-id-logged_in .view-inner {
-    padding-top: 40px;
-    display: table; }
-    .view-list-users.view-display-id-logged_in .view-inner .view-content {
-      text-align: right; }
-.view-list-users .views-row {
-  display: inline-block;
-  vertical-align: middle;
-  *vertical-align: auto;
-  *zoom: 1;
-  *display: inline;
-  vertical-align: bottom; }
-.view-list-users .person-wrapper {
-  width: 384px;
-  position: relative;
-  height: 615px;
-  margin-left: -30px;
-  padding-top: 208px; }
-  .view-list-users .person-wrapper.active .fields {
-    filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
-    opacity: 1; }
-  .view-list-users .person-wrapper .fields {
-    color: #191919;
-    height: 160px;
+.view-list-users {
+  	/*
+  &.view-display-id-logged_in {
+  	  
+  	  width:100%;
+      min-height:100%;
+      z-index:0;
+      overflow-y:hidden;
+      overflow-x:auto;
+      white-space:nowrap;
+      
+  
+  	  .view-inner { 
+  	    padding-top:40px;
+        display:table;
+        .view-content {
+          text-align:right;
+        }
+    	}
+  	}
+  	.views-row {
+  		@include inline-block;
+  		vertical-align: bottom;
+  	}
+  */ }
+  .view-list-users .view-more {
+    display: inline-block;
+    width: 100%;
+    right: 15px;
+    height: 100%;
+    margin-top: 85%;
+    position: relative;
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
     opacity: 0;
-    -moz-transition: all 0.5s;
-    -o-transition: all 0.5s;
-    -webkit-transition: all 0.5s;
-    transition: all 0.5s;
-    position: absolute;
-    height: 160px;
-    width: 80%;
-    left: 10%;
-    text-align: left;
-    background: #fff;
-    padding: 10px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-    top: 20px; }
-    .view-list-users .person-wrapper .fields .fields-inner {
-      overflow-x: hidden;
-      overflow-y: auto;
-      height: 100%;
-      position: relative;
-      z-index: 1; }
-    .view-list-users .person-wrapper .fields .user-picture img {
-      width: 100%; }
-    .view-list-users .person-wrapper .fields .views-field-name-1 {
-      font-size: 3rem; }
-    .view-list-users .person-wrapper .fields:after {
+    -moz-transition: all 1s ease-in;
+    -o-transition: all 1s ease-in;
+    -webkit-transition: all 1s ease-in;
+    transition: all 1s ease-in;
+    margin-left: 30px; }
+    .view-list-users .view-more.faded {
+      opacity: 0 !important; }
+    .view-list-users .view-more.disabled {
+      -moz-transform: scale(0, 0);
+      -ms-transform: scale(0, 0);
+      -webkit-transform: scale(0, 0);
+      transform: scale(0, 0); }
+  .view-list-users .slick-slide .view-more {
+    filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+    opacity: 1; }
+  .view-list-users .person-wrapper {
+    width: 384px;
+    position: relative;
+    height: 615px;
+    margin-left: -30px;
+    padding-top: 208px; }
+    .view-list-users .person-wrapper.active .fields {
+      filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+      opacity: 1; }
+    .view-list-users .person-wrapper .fields {
+      color: #191919;
+      height: 160px;
+      filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+      opacity: 0;
+      -moz-transition: all 0.5s;
+      -o-transition: all 0.5s;
+      -webkit-transition: all 0.5s;
+      transition: all 0.5s;
       position: absolute;
-      width: 30px;
-      height: 30px;
-      -moz-transform: rotate(45deg);
-      -ms-transform: rotate(45deg);
-      -webkit-transform: rotate(45deg);
-      transform: rotate(45deg);
+      height: 160px;
+      width: 80%;
+      left: 10%;
+      text-align: left;
       background: #fff;
-      left: 50%;
-      margin-left: -15px;
-      bottom: -5px;
-      content: " ";
-      z-index: 0; }
-  .view-list-users .person-wrapper .body {
-    display: block; }
-    .view-list-users .person-wrapper .body .person {
-      max-height: 100%;
-      width: 100%;
-      height: auto; }
+      padding: 10px;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+      top: 20px; }
+      .view-list-users .person-wrapper .fields .fields-inner {
+        overflow-x: hidden;
+        overflow-y: auto;
+        height: 100%;
+        position: relative;
+        z-index: 1; }
+      .view-list-users .person-wrapper .fields .user-picture img {
+        width: 100%; }
+      .view-list-users .person-wrapper .fields .views-field-name-1 {
+        font-size: 3rem; }
+      .view-list-users .person-wrapper .fields:after {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        -moz-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+        transform: rotate(45deg);
+        background: #fff;
+        left: 50%;
+        margin-left: -15px;
+        bottom: -5px;
+        content: " ";
+        z-index: 0; }
+    .view-list-users .person-wrapper .body {
+      display: block; }
+      .view-list-users .person-wrapper .body .person {
+        max-height: 100%;
+        width: 100%;
+        height: auto; }
 
 .jspContainer {
   overflow: hidden;

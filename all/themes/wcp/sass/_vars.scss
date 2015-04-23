@@ -1,12 +1,15 @@
 @import "compass";
 @import "mixins";
 
+@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700|Bitter:400,700);
+
 /*
  * Bootstrap Breakpoints
  */
  $break-xs : 768px;
  $break-sm : 960px;
  $break-md : 1200px;
+ $break-lg : 1440px;
 
 /**
  * Font Sizes
@@ -15,6 +18,11 @@ $h1 : 1.8em;
 $h2 : 1.5em;
 $h3 : 1.2em;
 
+/**
+ * Fonts
+ */
+ $headings: "Bitter";
+ $sans:"Lato";
 
 
 
@@ -29,20 +37,11 @@ $base :  #26B65F;
 $highlight-1 : #95E2E5;
 $highlight-2 : #FFB800;
 $dark-1 : darken($base,20%);
+$text : rgb(252, 246, 190);
 
 
 //
 // Arbitrary Values
 //
 $spacing:15px;
-
-//
-// Custom mixins
-//
-@mixin _box-shadow {
-  @include box-shadow(-2px 1px 0px darken($base,20%));
-}
-
-@mixin _text-shadow {
-  @include text-shadow(-2px 1px 0px darken($base,20%));
-}
+$map-height:400px;

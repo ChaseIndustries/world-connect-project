@@ -23,12 +23,17 @@
 }
 
 .front-map {
-	&,#map {
+  position:fixed;
+  z-index:0;
+  top:0;
+  left:0;
+  height:$map-height;
+  width:100%;
+	#map {
 	  width:100%;
-		height:400px;
+		height:$map-height;
     z-index:200;
     position:relative;
-    margin-bottom:2em;
 	}
 }
 
@@ -49,17 +54,23 @@
   width:100%;
   min-height:100%;
   z-index:0;
+/*
   overflow-y:hidden;
   overflow-x:auto;
   white-space:nowrap;
-  &.logged-out {
+*/
+  
+ /*
+ &.logged-out {
     padding-left:75%;
   }
-  .view-inner { 
-    padding-top:40px;
-    display:table;
+*/
+  .view-inner {
     .view-content {
       text-align:right;
+      position: relative;
+      left:0;
+      @include transition(.5s all);
     }
 	}
 	.views-row {
@@ -67,9 +78,13 @@
 		vertical-align: bottom;
 	}
 	.person {
+	  &.new {
+  	  @include transition(.5s all);
+	  }
 	  .person__loader {
   	  @include transition(.3s all);
   	  @include absolute-center();
+  	  margin-top:85%;
 	  }
 	  .person__body {
 	    @include opacity(0);
@@ -83,11 +98,19 @@
     	  @include opacity(0);
   	  }
 	  }
-		width:384px;
+	  /*
+	   * This property defines the default width of a person
+	   */
+		width:100px;
+		/*
+		 */
+		&.zoomed {
+  		width:120%;
+		}
+		max-width:300px;
 		position:relative;
-		height:615px;
-		margin-left:-30px;
-		padding-top:208px;
+		margin:auto;
+		@include transition(.5s all);
 		&.active, &:hover {
 			.person__inner {
         @include opacity(1);
@@ -97,17 +120,18 @@
 		    color:$near-black;
 		    height:160px;
 		    font-size:50%;
-  			@include opacity(0);
   			@include transition(.5s all);
-  			position:absolute;
-  			height:160px;
-  		  width:80%;
-  			left:10%;
+  			position:relative;
+  			height:100%;
+  		  width:150%;
+  		  @include translate3d(-50%,0,0);
+  			left:50%;
+  			margin-bottom:20px;
   			text-align:left;
   			background:#fff;
   			padding:10px;
   			@include border-radius(5px);
-        top:20px;
+  			@include opacity(0);
 		  .person__fields {
   			overflow-x:hidden;
         overflow-y:auto;
@@ -151,108 +175,8 @@
 	}
 }
 
-.jspContainer
-{
-	overflow: hidden;
-	position: relative;
-}
-
-.jspPane
-{
-	position: absolute;
-}
-
-.jspVerticalBar
-{
-	position: absolute;
-	top: 0;
-	right: 0;
-	width: 16px;
-	height: 100%;
-	background: rgba(0,0,0,.4)
-}
-
-.jspHorizontalBar
-{
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	height: 8px;
-	background: transparent;
-}
-
-.jspCap
-{
-	display: none;
-}
-
-.jspHorizontalBar .jspCap
-{
-	float: left;
-}
-
-.jspTrack
-{
-	background: none;
-	position: relative;
-}
-
-.jspDrag
-{
-	background: rgba(0,0,0,.4);
-	position: relative;
-	top: 0;
-	left: 0;
-	cursor: pointer;
-	@include border-radius(0);
-}
-
-.jspHorizontalBar .jspTrack,
-.jspHorizontalBar .jspDrag
-{
-	float: left;
-	height: 100%;
-}
-
-.jspArrow
-{
-	background: #50506d;
-	text-indent: -20000px;
-	display: block;
-	cursor: pointer;
-	padding: 0;
-	margin: 0;
-}
-
-.jspArrow.jspDisabled
-{
-	cursor: default;
-	background: #80808d;
-}
-
-.jspVerticalBar .jspArrow
-{
-	height: 16px;
-}
-
-.jspHorizontalBar .jspArrow
-{
-	width: 16px;
-	float: left;
-	height: 100%;
-}
-
-.jspVerticalBar .jspArrow:focus
-{
-	outline: none;
-}
-
-.jspCorner
-{
-	background: #eeeef4;
-	float: left;
-	height: 100%;
+hr {
+  border-color:darken($base,10%)
 }
 
 //
@@ -261,19 +185,123 @@
 
 .btn {
   &, &:hover, &:focus {
+    @include transition(.2s all);
     background-color:transparent;
+    @include transition(.2s background-color);
+    padding-left:1.5em;
+    padding-right:1.5em;
+    background:$highlight-2;
+    color:$base;
+    text-transform: uppercase;
+    font-size:.7em;
+    border:0;
     &.btn--cta {
       background-color:$dark-1;	
       color:$highlight-2;
+      font-family:$headings;
+      font-size:.7em;
       position:relative;
-      @include box-shadow(-2px 2px 0px darken(#146233, 20%));
+      @include box-shadow(0px 1px 0px darken(#146233, 20%));
       font-size:1em;
       margin-top:.5em;
       &:active {
-        @include box-shadow(-1px 1px 0px darken(#146233, 20%));
+        @include box-shadow(0px 0px 0px darken(#146233, 20%));
         bottom:-1px;
-        left:-1px;
+      }
+      &:hover {
+        background-color:lighten($dark-1,5%);
       }
     }
   }
+  &:hover {
+    background:lighten($highlight-2,3%);
+  }
+}
+
+.person.user-profile.view-mode-full {
+  font-size:.6em;
+  .person__body {
+    width:200px;
+  }
+}
+
+.modal {
+  width:100%;
+  height:100%;
+  position:fixed;
+  left:0;
+  top:0;
+  content:"";
+  z-index:100;
+  @include transition(.3s all);
+  @include opacity(0);
+  background:rgba(0,0,0,.7);
+  &.visible {
+    display:block;
+  }
+  &.fade {
+    @include opacity(1);
+  }
+  .modal__inner {
+    position:fixed;
+    left:50%;
+    top:10%;
+    @include translateX(-50%);
+    height:80%;
+    overflow: hidden;
+    z-index:200;
+    background:$base;
+    font-size:.6em;
+    max-width:1200px;
+    width:95%;
+    @include border-radius(10px);
+    .modal__content {
+      padding:$spacing;
+      overflow: auto;
+      height:100%;
+    }
+  }
+}
+
+.geolocation-html5-map {
+  max-width: 100%;
+}
+
+.help-block {
+  color:$text;
+  font-size:.9em;
+}
+
+#user-login-form {
+  ul {
+    list-style: none;
+    padding-left:0;
+    margin-left:0;
+  }
+}
+
+.password-suggestions, .password-strength, .password-confirm {
+  font-size:.8em;
+}
+
+.colorpicker-placeholder {
+  position:relative;
+  width:50px;
+  height:50px;
+  background:#fff;
+}
+
+.colorpicker-element {
+  height:1px;
+  padding:0;
+  @include opacity(0);
+}
+
+.messages-container {
+  position: absolute;
+  top:0;
+  left:0;
+  width:100%;
+  padding:10px 0;
+  z-index:1000;
 }

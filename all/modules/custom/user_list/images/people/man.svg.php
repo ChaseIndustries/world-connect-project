@@ -1,6 +1,6 @@
 <?php
 
-  $user = json_decode(urldecode($_GET["user"]));
+$user = json_decode(urldecode($_GET["user"]));
   
 
 /*
@@ -16,8 +16,7 @@ header('Content-type: image/svg+xml');
 ?>
 <!-- Generator: Adobe Illustrator 16.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="man" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="607.321px" height="603.316px" viewBox="0 32.316 607.321 603.316" enable-background="new 0 32.316 607.321 603.316"
-	 xml:space="preserve">
+	 width="607.321px" height="603.316px" viewBox="0 32.316 607.321 603.316" enable-background="new 0 32.316 607.321 603.316" xml:space="preserve">
 <g id="field_skin_tone">
 	<rect x="255.321" y="42.316" fill="<?=$user->field_skin_tone->und[0]->rgb?>" width="92" height="103"/>
 	<rect y="144.316" fill="<?=$user->field_skin_tone->und[0]->rgb?>" width="607.321" height="26"/>

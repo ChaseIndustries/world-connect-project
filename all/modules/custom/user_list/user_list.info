@@ -5,8 +5,9 @@ files[] = user_list.module
 
 scripts[] = jquery.scrollTo.min.js
 scripts[] = jquery.mousewheel.js
-scripts[] = jquery.jscrollpane.min.js
+scripts[] = slick.js
 scripts[] = user_list.js
 
-stylesheets[all][] = jquery.jscrollpane.css 
+stylesheets[all][] = slick.css 
+stylesheets[all][] = slick-theme.css 
 stylesheets[all][] = user_list.css 

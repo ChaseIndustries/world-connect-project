@@ -160,6 +160,7 @@
 
   </div>
 </div>
-<footer class="footer container">
+<footer class="footer container padding-bottom">
+  &copy; <?=date("Y")?> World Connect Project
   <?php print render($page['footer']); ?>
 </footer>
