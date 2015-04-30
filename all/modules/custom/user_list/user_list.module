@@ -101,6 +101,7 @@ function user_list_get_next_users($page = 0, $amount = 20) {
 }
 
 function user_list_get_prev_users($page = 0, $amount = 20) {
+
   $view = views_get_view("list_users");
   
   if(user_is_logged_in()){
@@ -112,9 +113,7 @@ function user_list_get_prev_users($page = 0, $amount = 20) {
     $view->set_display("list_users");
     $view->set_current_page($page);
   }
-  
   $view->set_items_per_page($amount);
-
   user_list_print_result($view);
 }
 
@@ -129,7 +128,7 @@ function user_list_print_result($view){
   $result["accounts"] = array();
   
   foreach($view->result as $row){
-    $user = user_load($row->users_uid);
+    $user = user_load($row->uid);
     $user_markup = user_view($user, "person");
     $user->html = drupal_render($user_markup);
     $result["accounts"][] = $user;

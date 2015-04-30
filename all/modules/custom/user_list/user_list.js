@@ -11,6 +11,10 @@ var UserList = function($, user_data){
 		node:".person",
 	},
 	markers = [],
+	defaultStyles,
+	centerMarker = false,
+	midpoint = false,
+	line = false,
 	footerHeight,
 	personWidth,
 	$container = $(classes.list),
@@ -30,6 +34,7 @@ var UserList = function($, user_data){
 		  /*disableDefaultUI: true,*/
 		 scrollwheel: false
 		},
+  prevZoom = mapSettings.zoom,
   width,
   scrollPane,
 	requests = {},
@@ -37,11 +42,8 @@ var UserList = function($, user_data){
   origSettings,
   user_data = user_data || false;
   self.pageNum = 1;
-  
   setVariables();
-	initmap();
-	initUserNodes(user_data);
-	
+  initmap();
   $('.view-more').on('click', function(){
     if(!$(this).hasClass("disabled")){
       self.fetchNextUsers(self.itemsPerPage, self.pageNum);
@@ -54,22 +56,14 @@ var UserList = function($, user_data){
     if(requests.fetchNextUsers){ requests.fetchNextUsers = false; }
       if(scrollPane){
         //go to last slide before doing anyhthing
-        scrollPane.slick("slickGoTo", $(classes.node).length - 1);
+        //scrollPane.slick("slickGoTo", $(classes.node).length - 1);
       }
       //stagger load (for visual cue)
       var delay = 100;
       $(".view-more").addClass("faded").css("margin-left",itemsPerPage * personWidth);        
         //create dummy rows to indicate the ajax call has started
         for(var i = 0; i < itemsPerPage; i++){
-          var removeFade = function(index){
-            setTimeout(function(){ 
-              scrollPane.slick('slickAdd','<div class="views-row"><div class="fade person new"><img src="sites/all/themes/wcp/images/loader.svg" class="person__loader"></div></div>', $(classes.node).length - 1);
-              scrollPane.on('reInit', function(){
-                $(".person.new:eq("+index+")").removeClass('fade');
-              })
-            }, index * delay);
-          }
-          removeFade(i);
+            scrollPane.slick('slickAdd','<div class="views-row"><div class="person new"><img src="sites/all/themes/wcp/images/loader.svg" class="person__loader"></div></div>', $(classes.node).length - 1)
         }
         
         var curPage = pageNum;
@@ -84,7 +78,7 @@ var UserList = function($, user_data){
               }
               if(user_data){
                 //merge old user_data with this one
-                user_data = $.extend(user_data,accounts);
+                user_data = user_data.concat(accounts);
               } else {
                 user_data = accounts;
               }
@@ -99,7 +93,7 @@ var UserList = function($, user_data){
               }
               
               $(".view-more").css("margin-left","").removeClass("faded");
-              initUserNodes(accounts);
+              initUserNodes(user_data);
             }
           }, 'json');
       }, itemsPerPage * delay);
@@ -107,11 +101,9 @@ var UserList = function($, user_data){
   }
 
   self.fetchPrevUsers = function(itemsPerPage, pageNum){
-    
     if(requests.fetchPrevUsers){ requests.fetchPrevUsers = false; }
       $(".view-more").addClass("faded").css("margin-left",itemsPerPage * personWidth);
-      setTimeout(function(){  
-        
+      setTimeout(function(){
         //create dummy rows to indicate the ajax call has started
         for(var i = 0; i < itemsPerPage; i++){
           scrollPane.slick('slickAdd','<div class="views-row person"><img src="sites/all/themes/wcp/images/loader.svg" class="person__loader"></div>', true);
@@ -128,7 +120,7 @@ var UserList = function($, user_data){
             //merge old user_data with this one
             if(user_data){
               //merge old user_data with this one
-              user_data = $.extend(user_data,accounts);
+              user_data = accounts.concat(user_data);
             } else {
               user_data = accounts;
             }
@@ -140,7 +132,7 @@ var UserList = function($, user_data){
               count++;
             }
             $(".view-more").css("margin-left","").removeClass("faded");
-            initUserNodes(accounts);
+            initUserNodes(user_data);
           }
         }, 'json');
       },1000);
@@ -151,12 +143,7 @@ var UserList = function($, user_data){
   self.goToUser = function($user){
     if($user.length && scrollPane){
 	    setTimeout(function(){
-  	    scrollPane.slick("slickGoTo", $user.attr("data-slick-index"));
-  	      $(".person").addClass("zoomed");          
-  	      setTimeout(function(){
-    	     $(classes.list).height($(".person").height());
-    	     var personWidth = $(".person").width();
-  	      },500)
+  	    scrollPane.slick("slickGoTo", $user.attr("data-slick-index"));         
   	   },300);
   	}
   	return false;
@@ -176,7 +163,7 @@ var UserList = function($, user_data){
 	}
 	function initmap(){
 		/* 365,222 feet in 1 degree of latitude */
-		mapSettings.styles = [
+		defaultStyles = [
     {
       "featureType": "landscape.man_made",
       "stylers": [
@@ -205,27 +192,63 @@ var UserList = function($, user_data){
         { "visibility": "off" }
       ]
     }];
-    mapSettings.center = new google.maps.LatLng(0,0),
-    map = new google.maps.Map(document.getElementById("map"),mapSettings);
+		mapSettings.styles = defaultStyles;
+    mapSettings.center = new google.maps.LatLng(0,0);
+    map = new google.maps.Map(document.getElementById("map"), mapSettings);
 		defaultZoom = map.getZoom();
-		var userLines = [];
+		google.maps.event.addListenerOnce(map, 'idle', function(){
+		  initUserNodes(user_data);
+		});
 		map.addListener("zoom_changed",function(){
 		  mapSettings.zoom = map.getZoom();
 		  changeIcons();		
 		});
 		//map.addListener("drag",hideOverlays);
-		var lineOpts=[],userMarkers=[];
-		var c = 0;
+		var lineOpts=[],userMarkers=[],c = 0;
 		/*var equator = new google.maps.Polyline({zIndex:1,path:[new google.maps.LatLng(0, -180),new google.maps.LatLng(0, 0),new google.maps.LatLng(0, 180)],"map":map,strokeColor:"#ff0000",strokeWeight:2,strokeOpacity:.3});*/
 		/*var pm = new google.maps.Polyline({zIndex:1,path:[new google.maps.LatLng(-180, 0),new google.maps.LatLng(0, 0),new google.maps.LatLng(180, 0)],"map":map,strokeColor:"#ff0000",strokeWeight:2,strokeOpacity:.3});*/
+  		map.hideFeatures = function(){
+    		map.setOptions({ styles : defaultStyles });
+  		} 
+  		map.showFeatures = function(){
+    		map.setOptions({ styles : [
+        {
+          "featureType": "landscape.man_made",
+          "stylers": [
+            { "visibility": "on" }
+          ]
+        },{
+          "featureType": "poi",
+          "stylers": [
+            { "visibility": "on" }
+          ]
+        },{
+          "featureType": "water",
+          "stylers": [
+            { "color": "#26B65F" }
+          ]
+        },{
+          "featureType": "landscape.natural",
+          "stylers": [
+            { "saturation": 16 },
+            { "color": "#95E2E5" },
+            { "lightness": 24 }
+          ]
+        },{
+          "featureType": "administrative",
+          "stylers": [
+            { "visibility": "on" }
+          ]
+        }]
+  		});
+  	}
 	}
-	
 	function setVariables(){
 	  width         = $(window).width()
     personWidth   = $(".person").width();
     footerHeight  = $("#map").height();
     personWidth   = $(".person").width();
-    self.itemsPerPage = Math.round(width/personWidth);   
+    self.itemsPerPage = Math.floor(width/personWidth);
   }
 	
 	function positionUsers(){
@@ -235,6 +258,9 @@ var UserList = function($, user_data){
 		if(!scrollPane){
 		  slickSettings.initialSlide = $(".current-user").length ? $(".current-user").index(".views-row") : 1;
 		  slickSettings.slidesToShow = self.itemsPerPage;
+      if(totalRows.uids_greater - $(classes.node).length <= 0){
+        $(".view-more").addClass("disabled");
+      }
   		scrollPane = $(classes.list).find(".view-content").slick(slickSettings);
   		scrollPane.on('afterChange', function(slick, currentSlide){
   		  var curSlide = scrollPane.slick("slickCurrentSlide");
@@ -252,59 +278,23 @@ var UserList = function($, user_data){
   	if(prevZoom == mapSettings.zoom){
     	return false;
   	}
-  	var prevZoom = mapSettings.zoom;
-  	if(mapSettings.zoom > 12){
-    	//show more stuff
-      if(!origSettings){
-        origSettings = mapSettings;
-      }
-      
-      var newSettings = mapSettings;
-      mapSettings.zoom = origSettings.zoom = mapSettings.zoom;
-      mapSettings.center = map.getCenter();
-      mapSettings.styles = [
-      {
-        "featureType": "landscape.man_made",
-        "stylers": [
-          { "visibility": "on" }
-        ]
-      },{
-        "featureType": "poi",
-        "stylers": [
-          { "visibility": "on" }
-        ]
-      },{
-        "featureType": "water",
-        "stylers": [
-          { "color": "#26B65F" }
-        ]
-      },{
-        "featureType": "landscape.natural",
-        "stylers": [
-          { "saturation": 16 },
-          { "color": "#95E2E5" },
-          { "lightness": 24 }
-        ]
-      },{
-        "featureType": "administrative",
-        "stylers": [
-          { "visibility": "on" }
-        ]
-      }];
-      map.setOptions(newSettings);
+  	prevZoom = mapSettings.zoom;
+  	if(map.getZoom() > 12){      
+      map.showFeatures();
   	} else {
-    	map.setOptions(origSettings);
-  	}
-  	if(mapSettings.zoom == 21){
+      map.hideFeatures();
+    }
+    
+  	if(map.getZoom() == 21){
     	//change the icons
     	for(i=0;i<markers.length;i++){
     	  markers[i].setIcon(theme_dir+"/images/marker_person_1.png");
       }
       
-  	} else if(prevZoom == 21){
-  	      	for(i=0;i<markers.length;i++){
+  	} else if(map.getZoom() < 21){
+  	  for(i=0;i<markers.length;i++){
       	markers[i].setIcon(theme_dir+"/images/dot_"+Math.ceil(Math.random()*4)+".png");
-    	};
+      }
   	}
 	}
 	
@@ -327,15 +317,6 @@ var UserList = function($, user_data){
       	image = el.find(".person__svg");
       	el.addClass("visible");
       	image.on("load", function(){
-  /*
-      	  var svgDoc = image.contentDocument;
-      	  $.each(attributes, function(i, attribute){
-      	    if(attribute){
-      	      var sect = svgDoc.getElementById(i);
-              $(sect).attr("fill",attribute).children().attr("fill",attribute);
-            }
-      	  });
-  */
       	  el.addClass("visible");
       	});
     	}
@@ -361,7 +342,6 @@ var UserList = function($, user_data){
       $(".initial").remove();
     }
 		var armSpan = 5.5 //in feet,
-		userLines = [],
 		startPoint=0,
 		endPoint=0;
 		var armSpanMiles = armSpan/365222;
@@ -372,12 +352,11 @@ var UserList = function($, user_data){
 		}
 		var geocoder = new google.maps.Geocoder();
 		for(var i in accounts){
-		 
-		 //stopgap because of google maps api requests limit
-		  //if(i > 5){ continue; }
-		  //
+		
 			var user = accounts[i];
-      function drawConnectingLine(latlng){
+			endPoint += armSpanMiles;
+			
+      function drawConnectingLine(latlng, user, endPoint){
   			//draw connecting line
 					var lon = latlng.lng();
 					var lineSymbol = {
@@ -386,22 +365,22 @@ var UserList = function($, user_data){
 					  strokeWeight:1,
 					  scale: 3
 					};
-					var connectLineCap = new google.maps.Marker({position:latlng,map:map,icon:theme_dir+"/images/dot_"+Math.ceil(Math.random()*4)+".png"});
-						google.maps.event.addListener(connectLineCap, 'click', function(){
-						  mapCenter = connectLineCap.getPosition();
+					user.connectLineCap = new google.maps.Marker({position:latlng,map:map,icon:theme_dir+"/images/dot_"+Math.ceil(Math.random()*4)+".png"});
+						google.maps.event.addListener(user.connectLineCap, 'click', function(){
+						  mapCenter = user.connectLineCap.getPosition();
+						  prevZoom = mapSettings.zoom;
   						if(mapSettings.zoom == 21){
-  						  mapSettings.zoom = 4
+  						  mapSettings.zoom = 4;
               } else {
                 mapSettings.zoom = 21;
-                
               }
               map.setZoom(mapSettings.zoom);
               map.setCenter(mapCenter);
           });
-					markers.push(connectLineCap);
-					var lineCoordinates = [latlng,new google.maps.LatLng(0,endPoint)],
+					markers.push(user.connectLineCap);
+					var lineCoordinates = [latlng , new google.maps.LatLng(0, endPoint)],
 					infowindow =  new google.maps.InfoWindow({ content: '' });
-					var connectLine = new google.maps.Polyline({
+					user.connectLine = new google.maps.Polyline({
 						  path          : lineCoordinates,
 						  strokeOpacity : 0,
 						  strokeColor   : "#fff",
@@ -413,18 +392,47 @@ var UserList = function($, user_data){
 							  repeat : '10px'
 						    }]
 					});
+					google.maps.event.addListener(user.connectLine, 'click', function(){
+					  if(map.getZoom() < 13){ 
+					    map.panTo(latlng);
+					    map.setCenter(latlng);
+					  }
+					});					
 			}
 			
-      if(typeof(user["field_location"]["latitude"]) !== "undefined" || typeof(user["field_location"]["longitude"]) !== "undefined"){
-        var latlng = new google.maps.LatLng(user["location"]["latitude"],user["location"]["longitude"]);
-        drawConnectingLine(latlng);   
+      if(typeof(user["field_location"]["und"]) == 'object'){
+       var latlng = new google.maps.LatLng(user["field_location"]["und"][0]["lat"],user["field_location"]["und"][0]["lng"]);
+       if(typeof(user.connectLine) == "undefined"){
+        drawConnectingLine(latlng, user, endPoint);   
+       } 
       }
-			endPoint += armSpanMiles;
 		} /* for i in user_data */
 		var startLatlng = new google.maps.LatLng(0,startPoint);
 		var endLatlng = new google.maps.LatLng(0,endPoint);
 		var lineOpts =  {zIndex:2,geodesic:true,lineLength:endPoint,path:[startLatlng,endLatlng],strokeColor:"#ff0000",map:map,strokeWeight:1,strokeOpacity:1};
-		var line = new google.maps.Polyline(lineOpts);
+		if(line){
+		  line.setMap(null);
+		}
+		line = new google.maps.Polyline(lineOpts);
+		//find middle of line
+    midPoint = new google.maps.LatLng(startPoint / 2 , endPoint / 2);
+    map.setCenter(midPoint);
+    //add a marker there
+    if(centerMarker){
+      centerMarker.setMap(null);
+    }
+    centerMarker = new google.maps.Marker({position:midPoint, map:map, cursor:'pointer'});
+    google.maps.event.addListener(centerMarker, 'click', function(){
+      if(map.getCenter() == midPoint){
+        if(map.getZoom() == 21){
+          map.setZoom(4);
+        } else {
+  		    map.setZoom(21);
+  		  }
+		  }
+		  map.panTo(midPoint);
+		  map.setCenter(midPoint);
+		});
 		//var bounds = new google.maps.LatLngBounds(new google.maps.LatLng(-9/365220,startPoint),new google.maps.LatLng((-9+h)/365220,endPoint));
 		//create an options object
 		//create line from origin to center of equator line (ie connection)	
@@ -441,26 +449,33 @@ window.onload = function(){
 	var user_list = new UserList($, user_data);  
   //fetch users
   if(user_list.itemsPerPage > $(".person").length){
-    
     var itemsToFetch = ( user_list.itemsPerPage - $(".person").length );
   	if($(".logged-in").length){
   	
-  	  itemsToFetch = itemsToFetch / 2;
+  	  itemsToFetch = Math.round(itemsToFetch / 2);
+  	  var nextToFetch = itemsToFetch;
+  	  var prevToFetch = itemsToFetch;
   	  
-  	  if( totalRows.uids_less > itemsToFetch ){
-  	    var prevToFetch = itemsToFetch;
-  	    var rem = 0;
-  	  } else {
-    	  var prevToFetch = itemsToFetch  - ( itemsToFetch + parseInt(totalRows.uids_less) );
-    	  var rem = itemsToFetch - totalRows.uids_less;
+  	  totalRows.uids_greater = parseInt(totalRows.uids_greater);
+  	  totalRows.uids_less = parseInt(totalRows.uids_less);
+  	  var rem = {};
+  	  
+  	  if( totalRows.uids_less < itemsToFetch ){
+    	  prevToFetch = itemsToFetch  - ( itemsToFetch + totalRows.uids_less );
+    	  rem.prev = itemsToFetch - totalRows.uids_less;
   	  }
-  	  if(totalRows.uids_greater < ( itemsToFetch ) + rem){
-    	  var nextToFetch = itemsToFetch- ( itemsToFetch + totalRows.uids_greater );
-    	  var rem = itemsToFetch - totalRows.uids_greater;
-  	  } else {
-    	  var nextToFetch = itemsToFetch + rem;
-    	  var rem = 0;
+  	  if(totalRows.uids_greater < itemsToFetch){
+    	  nextToFetch = itemsToFetch - ( itemsToFetch + totalRows.uids_greater );
+    	  rem.next = itemsToFetch - totalRows.uids_greater;
   	  }
+  	  
+  	  if(rem.next){
+    	  prevToFetch = itemsToFetch + rem.next;
+  	  }
+  	  if(rem.prev){
+    	  nextToFetch = itemsToFetch + rem.prev;
+  	  }
+  	  
   	  if(prevToFetch){
   	    user_list.fetchPrevUsers(prevToFetch,user_list.pageNum);
   	  }
@@ -471,5 +486,6 @@ window.onload = function(){
     	user_list.fetchNextUsers(itemsToFetch, user_list.pageNum);
   	}
 	}
+	user_list.goToCurrentUser();
 }
 
