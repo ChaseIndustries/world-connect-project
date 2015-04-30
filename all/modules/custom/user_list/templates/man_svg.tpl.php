@@ -1,4 +1,5 @@
 <?php
+
 $skin_tone = count($user->field_skin_tone) ? $user->field_skin_tone[LANGUAGE_NONE][0]["rgb"] : false;
 $pants_color = count($user->field_pants_color) ?  $user->field_pants_color[LANGUAGE_NONE][0]["rgb"] : false;
 $hair_color = count($user->field_hair_color) ? $user->field_hair_color[LANGUAGE_NONE][0]["rgb"] : false;

@@ -151,14 +151,8 @@ function user_list_page_build(&$page) {
 
 
 function user_list_generate_svg($uid = NULL){
-  //$user = user_load($uid);
-  // Load up the properties from the node table.
-  $nids = array($uid);
-  $sql = 'SELECT * FROM {users} WHERE uid IN (:nids)';
-  $users = db_query($sql, array(':uids' => $nids))->fetchAllAssoc('uid');
-  // Attach the single field to all nodes.
-  field_attach_load('user', $users[0], FIELD_LOAD_CURRENT);
-  return theme('man_svg', array('user' => $users[0]) );
+  $user = user_load($uid);
+  return theme('man_svg', array('user' => $user ));
 }
 
 
