@@ -1,194 +1,97 @@
-/**
- * Font Sizes
- */
-/**
- * Colors
- */
-.view-list-users {
-  	/*
-  &.view-display-id-logged_in {
-  	  
-  	  width:100%;
-      min-height:100%;
-      z-index:0;
-      overflow-y:hidden;
-      overflow-x:auto;
-      white-space:nowrap;
-      
-  
-  	  .view-inner { 
-  	    padding-top:40px;
-        display:table;
-        .view-content {
-          text-align:right;
-        }
-    	}
-  	}
-  	.views-row {
-  		@include inline-block;
-  		vertical-align: bottom;
-  	}
-  */ }
-  .view-list-users .view-more {
-    display: inline-block;
-    width: 100%;
-    right: 15px;
-    height: 100%;
-    margin-top: 85%;
-    position: relative;
-    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
-    opacity: 0;
-    -moz-transition: all 1s ease-in;
-    -o-transition: all 1s ease-in;
-    -webkit-transition: all 1s ease-in;
-    transition: all 1s ease-in;
-    margin-left: 30px; }
-    .view-list-users .view-more.faded {
-      opacity: 0 !important; }
-    .view-list-users .view-more.disabled {
-      -moz-transform: scale(0, 0);
-      -ms-transform: scale(0, 0);
-      -webkit-transform: scale(0, 0);
-      transform: scale(0, 0); }
-  .view-list-users .slick-slide .view-more {
-    filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
-    opacity: 1; }
-  .view-list-users .person-wrapper {
-    width: 384px;
-    position: relative;
-    height: 615px;
-    margin-left: -30px;
-    padding-top: 208px; }
-    .view-list-users .person-wrapper.active .fields {
-      filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
-      opacity: 1; }
-    .view-list-users .person-wrapper .fields {
-      color: #191919;
-      height: 160px;
-      filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
-      opacity: 0;
-      -moz-transition: all 0.5s;
-      -o-transition: all 0.5s;
-      -webkit-transition: all 0.5s;
-      transition: all 0.5s;
-      position: absolute;
-      height: 160px;
-      width: 80%;
-      left: 10%;
-      text-align: left;
-      background: #fff;
-      padding: 10px;
-      -moz-border-radius: 5px;
-      -webkit-border-radius: 5px;
-      border-radius: 5px;
-      top: 20px; }
-      .view-list-users .person-wrapper .fields .fields-inner {
-        overflow-x: hidden;
-        overflow-y: auto;
-        height: 100%;
-        position: relative;
-        z-index: 1; }
-      .view-list-users .person-wrapper .fields .user-picture img {
-        width: 100%; }
-      .view-list-users .person-wrapper .fields .views-field-name-1 {
-        font-size: 3rem; }
-      .view-list-users .person-wrapper .fields:after {
-        position: absolute;
-        width: 30px;
-        height: 30px;
-        -moz-transform: rotate(45deg);
-        -ms-transform: rotate(45deg);
-        -webkit-transform: rotate(45deg);
-        transform: rotate(45deg);
-        background: #fff;
-        left: 50%;
-        margin-left: -15px;
-        bottom: -5px;
-        content: " ";
-        z-index: 0; }
-    .view-list-users .person-wrapper .body {
-      display: block; }
-      .view-list-users .person-wrapper .body .person {
-        max-height: 100%;
-        width: 100%;
-        height: auto; }
+/** Font Sizes */
+/** Colors */
+/* line 20, user_list.scss */
+.view-list-users { 	/*
+&.view-display-id-logged_in {
+	  
+	  width:100%; min-height:100%; z-index:0; overflow-y:hidden; overflow-x:auto; white-space:nowrap; 
 
-.jspContainer {
-  overflow: hidden;
-  position: relative; }
+	  .view-inner { 
+	    padding-top:40px; display:table; .view-content { text-align:right; } 	}
+	}
+	.views-row {
+		@include inline-block;
+		vertical-align: bottom;
+	}
+*/ }
+/* line 46, user_list.scss */
+.view-list-users .view-next { right: 15px; margin-left: 30px; }
+/* line 50, user_list.scss */
+.view-list-users .view-prev { left: 15px; margin-right: 30px; }
+/* line 54, user_list.scss */
+.view-list-users .view-next, .view-list-users .view-prev { display: inline-block; width: 100%; height: 100%; position: relative; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; position: relative; -moz-transition: all 1s ease-in; -o-transition: all 1s ease-in; -webkit-transition: all 1s ease-in; transition: all 1s ease-in; }
+/* line 60, user_list.scss */
+.view-list-users .view-next .inner, .view-list-users .view-prev .inner { top: 60%; position: absolute; line-height: 50px; width: 50px; text-align: center; background: rgba(0, 0, 0, 0.8); color: #fff; font-size: 1em; left: 0; }
+/* line 74, user_list.scss */
+.view-list-users .view-next.faded, .view-list-users .view-prev.faded { opacity: 0 !important; }
+/* line 77, user_list.scss */
+.view-list-users .view-next.disabled, .view-list-users .view-prev.disabled { -moz-transform: scale(0, 0); -ms-transform: scale(0, 0); -webkit-transform: scale(0, 0); transform: scale(0, 0); }
+/* line 82, user_list.scss */
+.view-list-users .slick-slide .view-next, .view-list-users .slick-slide .view-prev { filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false); opacity: 1; }
+/* line 86, user_list.scss */
+.view-list-users .person-wrapper { width: 384px; position: relative; height: 615px; margin-left: -30px; padding-top: 208px; }
+/* line 93, user_list.scss */
+.view-list-users .person-wrapper.active .fields { filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false); opacity: 1; }
+/* line 97, user_list.scss */
+.view-list-users .person-wrapper .fields { color: #191919; height: 160px; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; -moz-transition: all 0.5s; -o-transition: all 0.5s; -webkit-transition: all 0.5s; transition: all 0.5s; position: absolute; height: 160px; width: 80%; left: 10%; text-align: left; background: #fff; padding: 10px; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; top: 20px; }
+/* line 101, user_list.scss */
+.view-list-users .person-wrapper .fields .fields-inner { overflow-x: hidden; overflow-y: auto; height: 100%; position: relative; z-index: 1; }
+/* line 108, user_list.scss */
+.view-list-users .person-wrapper .fields .user-picture img { width: 100%; }
+/* line 122, user_list.scss */
+.view-list-users .person-wrapper .fields .views-field-name-1 { font-size: 3rem; }
+/* line 125, user_list.scss */
+.view-list-users .person-wrapper .fields:after { position: absolute; width: 30px; height: 30px; -moz-transform: rotate(45deg); -ms-transform: rotate(45deg); -webkit-transform: rotate(45deg); transform: rotate(45deg); background: #fff; left: 50%; margin-left: -15px; bottom: -5px; content: " "; z-index: 0; }
+/* line 139, user_list.scss */
+.view-list-users .person-wrapper .body { display: block; }
+/* line 141, user_list.scss */
+.view-list-users .person-wrapper .body .person { max-height: 100%; width: 100%; height: auto; }
 
-.jspPane {
-  position: absolute; }
+/* line 155, user_list.scss */
+.jspContainer { overflow: hidden; position: relative; }
 
-.jspVerticalBar {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 16px;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4); }
+/* line 161, user_list.scss */
+.jspPane { position: absolute; }
 
-.jspHorizontalBar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 8px;
-  background: transparent; }
+/* line 166, user_list.scss */
+.jspVerticalBar { position: absolute; top: 0; right: 0; width: 16px; height: 100%; background: rgba(0, 0, 0, 0.4); }
 
-.jspCap {
-  display: none; }
+/* line 176, user_list.scss */
+.jspHorizontalBar { position: absolute; bottom: 0; left: 0; width: 100%; height: 8px; background: transparent; }
 
-.jspHorizontalBar .jspCap {
-  float: left; }
+/* line 186, user_list.scss */
+.jspCap { display: none; }
 
-.jspTrack {
-  background: none;
-  position: relative; }
+/* line 191, user_list.scss */
+.jspHorizontalBar .jspCap { float: left; }
 
-.jspDrag {
-  background: rgba(0, 0, 0, 0.4);
-  position: relative;
-  top: 0;
-  left: 0;
-  cursor: pointer;
-  -moz-border-radius: 0;
-  -webkit-border-radius: 0;
-  border-radius: 0; }
+/* line 196, user_list.scss */
+.jspTrack { background: none; position: relative; }
 
-.jspHorizontalBar .jspTrack,
-.jspHorizontalBar .jspDrag {
-  float: left;
-  height: 100%; }
+/* line 202, user_list.scss */
+.jspDrag { background: rgba(0, 0, 0, 0.4); position: relative; top: 0; left: 0; cursor: pointer; -moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0; }
 
-.jspArrow {
-  background: #50506d;
-  text-indent: -20000px;
-  display: block;
-  cursor: pointer;
-  padding: 0;
-  margin: 0; }
+/* line 212, user_list.scss */
+.jspHorizontalBar .jspTrack, .jspHorizontalBar .jspDrag { float: left; height: 100%; }
 
-.jspArrow.jspDisabled {
-  cursor: default;
-  background: #80808d; }
+/* line 219, user_list.scss */
+.jspArrow { background: #50506d; text-indent: -20000px; display: block; cursor: pointer; padding: 0; margin: 0; }
 
-.jspVerticalBar .jspArrow {
-  height: 16px; }
+/* line 229, user_list.scss */
+.jspArrow.jspDisabled { cursor: default; background: #80808d; }
 
-.jspHorizontalBar .jspArrow {
-  width: 16px;
-  float: left;
-  height: 100%; }
+/* line 235, user_list.scss */
+.jspVerticalBar .jspArrow { height: 16px; }
 
-.jspVerticalBar .jspArrow:focus {
-  outline: none; }
+/* line 240, user_list.scss */
+.jspHorizontalBar .jspArrow { width: 16px; float: left; height: 100%; }
 
-.jspCorner {
-  background: #eeeef4;
-  float: left;
-  height: 100%; }
+/* line 247, user_list.scss */
+.jspVerticalBar .jspArrow:focus { outline: none; }
+
+/* line 252, user_list.scss */
+.jspCorner { background: #eeeef4; float: left; height: 100%; }
 
 /* Yuk! CSS Hack for IE6 3 pixel bug :( */
-* html .jspCorner {
-  margin: 0 -3px 0 0; }
+/* line 260, user_list.scss */
+* html .jspCorner { margin: 0 -3px 0 0; }

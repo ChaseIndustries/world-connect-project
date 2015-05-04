@@ -84,7 +84,8 @@
 	  .person__loader {
   	  @include transition(.3s all);
   	  @include absolute-center();
-  	  margin-top:85%;
+  	  max-width:60%;
+  	  margin-top:100px;
 	  }
 	  .person__body {
 	    @include opacity(0);

@@ -18,6 +18,7 @@ $ltGrey : #ccc;
 $dkGrey : #5a5a5a;
 $near-black:#191919;
 .view-list-users  {
+  margin-top:1em;
 	
 	/*
 &.view-display-id-logged_in {
@@ -43,25 +44,41 @@ $near-black:#191919;
 		vertical-align: bottom;
 	}
 */
-  .view-more {
-    display:inline-block;
-    width:100%;
+  .view-next {
     right:15px;
-    height:100%;
-    margin-top:85%;
-    position:relative;
-    @include opacity(0);
-    @include transition(1s all ease-in);
     margin-left:30px;
-    &.faded {
-      opacity:0 !important;
+  }
+  .view-prev {
+    left:15px;
+    margin-right:30px;
+  }
+  .view-next, .view-prev {
+    display:inline-block;
+    width:100%; 
+    height:100%;
+    position: relative;
+    @include opacity(0);
+    .inner {
+      top:60%;
+      position:absolute;
+      line-height:50px;
+      width:50px;
+      text-align: center;
+      background:rgba(0,0,0,.7);
+      color:#fff;
+      font-size:1em;
+      left:0;
     }
+    position:relative;
+    @include transition(1s all ease-in);
     &.disabled {
       @include scale(0);
     }
   }
-  .slick-slide .view-more {
-    @include opacity(1);
+  .slick-slide {
+    .view-next, .view-prev {
+      @include opacity(1);
+    }
   }
 	.person-wrapper {
 		width:384px;

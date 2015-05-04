@@ -41,6 +41,13 @@
   <div class="view-inner">
   <?php if ($rows): ?>
     <div class="view-content">
+      <div>
+       <div class="view-prev">
+          <div class="inner">
+            <a href="javascript:;"><span class="glyphicon glyphicon-menu-left"></span></a>
+          </div>
+       </div>
+      </div>
       <?php if ($attachment_before): ?>
         <?php print $attachment_before; ?>
       <?php endif; ?>
@@ -49,7 +56,11 @@
         <?php print $attachment_after; ?>
       <?php endif; ?>
       <div>
-      <div class="view-more"><a href="javascript:;"><img width="100%" src="/sites/all/themes/wcp/images/arrow.svg" /></a></div>
+        <div class="view-next">
+          <div class="inner">
+            <a href="javascript:;"><span class="glyphicon glyphicon-menu-right"></span></a>
+          </div>
+        </div>
       </div>
     </div>
   </div>

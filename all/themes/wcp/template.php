@@ -12,7 +12,7 @@ function wcp_preprocess(&$variables, $hook) {
       $user = $variables["elements"]["#account"];
       $variables["user"] = $user;
       $location = count($user->field_location) ? $user->field_location["und"][0] : false;
-      $variables["coords"] = $location ? $location["lat"] . ", " . $location["lng"] : "";
+      $variables["coords"] = $location ? $location : array("lat"=>"&nbsp;", "lng" => "&nbsp;");
       $variables["attributes_array"]["rel"] = $user->uid;
     break;
   }

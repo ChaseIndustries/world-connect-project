@@ -10,8 +10,15 @@
     <div class="person__inner">
       <div class="person__fields">
         <h2 class="person__name"><?php print $user->name ?></h2>
-        <div class="person__coords"><?php print $coords ?></div>
-              <?php print $ds_content; ?>
+        <div class="person__coords">
+          <div class="person__coords__lat">
+            <?php print $coords["lat"] ?>,
+          </div>
+          <div class="person__coords__lng">
+            <?php print $coords["lng"] ?>
+          </div>
+        </div>
+        <?php print $ds_content; ?>
       </div>
     </div>
       <div class="person__body">

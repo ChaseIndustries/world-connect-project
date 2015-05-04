@@ -6,7 +6,7 @@ ini_set('display_errors', '1');
 */
 
 
-drupal_add_js(drupal_get_path('module', 'user_list') .'/user_list.js');
+drupal_add_js(drupal_get_path('module', 'user_list') .'/user_list.js', array('type' => 'file', 'scope' => 'footer'));
 drupal_add_js('https://maps.googleapis.com/maps/api/js?key=AIzaSyAtwq1zUmBanBSj6mp3UyI7SNjTC5dNjuc','external');
 
 function user_list_views_api() {
@@ -43,7 +43,7 @@ function user_list_preprocess_views_view(&$vars){
     $GLOBALS["user_data"] = $result;
   }
   //add total rows for the front end
-  $GLOBALS["total_rows"][$view->current_display] = $view->total_rows;
+  $GLOBALS["total_rows"][$view->current_display] = (int) $view->total_rows;
 }
 
 function user_list_block_info(){
@@ -81,39 +81,44 @@ function user_list_menu() {
 /**
  * Callback to return JSON encoded image for given nid.
  */
-function user_list_get_next_users($page = 0, $amount = 20) {
+function user_list_get_next_users($amount = 10, $offset = 0) {
 
   $view = views_get_view("list_users");
-  
+    
   if(user_is_logged_in()){
    //load the attachment
    $view->set_display("uids_more");
-   $view->set_offset($page * $amount);
-   
   } else {
     $view->set_display("list_users");
-    $view->set_current_page($page);
   }
-  
+  if($amount > 100){
+    die();
+  }
   $view->set_items_per_page($amount);
+  $view->set_current_page(0);
+  $view->set_offset($offset);
   
   user_list_print_result($view);
 }
 
-function user_list_get_prev_users($page = 0, $amount = 20) {
+function user_list_get_prev_users($amount = 10, $offset = 0) {
 
   $view = views_get_view("list_users");
   
+  
   if(user_is_logged_in()){
    //load the attachment
-   $view->set_display("uids_less");
-   $view->set_offset($page * $amount);
-   
+   $view->set_display("uids_less");   
   } else {
     $view->set_display("list_users");
-    $view->set_current_page($page);
+  }
+  if($amount > 100){
+    die();
   }
   $view->set_items_per_page($amount);
+  $view->set_current_page(0);
+  $view->set_offset($offset);
+  
   user_list_print_result($view);
 }
 
@@ -123,7 +128,7 @@ function user_list_print_result($view){
   $result = array(
     "users"      => array(),
     "totalItems" => $view->total_rows, 
-    "itemsLeft"  => $view->total_rows - count($view->result)
+    "itemsLeft"  => $view->total_rows - ( count($view->result) * $view->current_page )
   );
   $result["accounts"] = array();
   
