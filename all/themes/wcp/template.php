@@ -1,5 +1,11 @@
 <?php
 
+/*
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+*/
+
+
 drupal_add_js(drupal_get_path('theme', 'wcp') . '/js/connect.js', array('type' => 'file', 'scope' => 'footer'));
 
 /**
@@ -21,4 +27,9 @@ function wcp_preprocess(&$variables, $hook) {
 function wcp_js_alter(&$javascript){
   // Swap out jQuery to use an updated version of the library.
   $javascript['misc/jquery.js']['data'] = drupal_get_path('theme', 'wcp') . "/js/vendor/jquery-1.11.2.min.js";
+}
+
+function wcp_preprocess_page(&$variables) {
+  global $user;
+  $variables["is_admin"] = in_array('administrator', array_values($user->roles));
 }

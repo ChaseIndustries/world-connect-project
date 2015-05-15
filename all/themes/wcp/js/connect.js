@@ -1,4 +1,8 @@
 (function($){
+
+  // Variables
+  var footerHeight = $("footer").height();
+
   if($(".field-type-color-field-rgb input").length){
     $(".field-type-color-field-rgb input").each(function(i){
       var self = this,
@@ -20,14 +24,50 @@
 
     })
 
-    
-    
+  var modalPane = false;
   }
-  $(".js__login-register__toggle").on("click", function(){
-      $(".login-register").toggleClass("visible");
+  
+  if($(".modal .error").length){
+    toggleModal();
+  }
+  
+  function toggleModal(){
+    $(".login-register").toggleClass("visible");
+      $("body").toggleClass("freeze");
+      if(!modalPane){ 
+        modalPane = $(".login-register.modal .modal__inner").jScrollPane({autoReinitialise:true, autoReinitialiseDelay:200});
+      }
       setTimeout(function(){
         $(".login-register").toggleClass("fade");
       },1);
+  }
+  $(".js__login-register__toggle").on("click", function(){
+      toggleModal();
   });
+
+  
+  Drupal.behaviors.wcp = {
+  attach: function (context, settings) {
+  function initPage(){
+      setVariables();
+      setPositions();
+    }
+    function setVariables(){
+      footerHeight = $(".footer").outerHeight();
+    }
+    function setPositions(){
+      $(".push").css({height:footerHeight});
+      $(".content-wrapper, .not-front .wrapper").css({marginBottom: -footerHeight, paddingBottom:footerHeight});
+      $(".region-content").css({minHeight: $(".content-wrapper").height() - $(".front-map").height()});
+    }
+    $(window, context).resize(function(){
+      initPage();
+    });
+    
+    $(window, context).on('load', function(){
+      initPage();
+    })
+  }
+};
   
 })(jQuery);

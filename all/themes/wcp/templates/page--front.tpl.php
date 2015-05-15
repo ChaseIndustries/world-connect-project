@@ -73,24 +73,36 @@
  * @ingroup themeable
  */
 ?>
-
 <div class="wrapper">
+<?php  if($is_admin) { ?>
   <div class="messages-container">
   <?php print $messages; ?>
-   </div>
-<? 
+  </div>
+<?php } ?>
+<?php
 global $user;
-if(!$logged_in || in_array('administrator', array_values($user->roles))){ ?>
+if(!$logged_in || $is_admin){ ?>
 		<div class="login-register modal">
 		  <div class="modal__inner">
 		    <div class="modal__content">
+		      <a class="login-link" href="/user">Already Registered?</a>
 		      <h2>Join the Chain</h2>
+		      <a href="javascript:;" class="modal__close js__login-register__toggle">&times;</a>
 		      <div class="row">
+		        <?php if($messages){ ?>
+		        <div class='col-sm-12'>
+		         <div class="messages-container">
+              <?php print $messages; ?>
+             </div>
+            </div>
+            <?php } ?>
+<!--
     		    <div class="col-sm-6 login-register__login">
     		      <? $user_login_form = drupal_get_form('user_login_block'); ?>
               <? print(drupal_render($user_login_form)); ?>
     		    </div>
-    		    <div class="col-sm-6 login-register__register">
+-->
+    		    <div class="col-sm-12 login-register__register">
     		    <? $register_form = drupal_get_form('user_register_form'); ?>
     		    <? print(drupal_render($register_form)); ?>
     		    </div>
@@ -99,13 +111,12 @@ if(!$logged_in || in_array('administrator', array_values($user->roles))){ ?>
 		    </div>
 		  </div>
 		</div>
-<? } ?>
-	</div>
+<?php } ?>
 	<script>
 	var theme_dir = "<?=$theme_dir?>";
 	</script>
-	<div class="front-map container-fluid"><div id="map"></div></div>
-	<div class="content-wrapper">
+	<div class="content-wrapper front">
+	<div class="front-map"><div id="map"></div></div>
     <?php print render($page['content']); ?>
     <!--
 <div class='view-list-users'>
@@ -122,7 +133,17 @@ if(!$logged_in || in_array('administrator', array_values($user->roles))){ ?>
       </div>
     </div>
 -->
-	</div>
-  <footer class="container footer">
-    <?php print render($page['footer']); ?>
+
+<div class="push"></div>
+</div>
+  <footer class="footer">
+    <div class="footer__top">
+      <?php print render($page['footer_top']); ?>
+    </div>
+    <div class="footer__bottom">
+      <div class="footer__inner container">
+        <?php print render($page['footer']); ?>
+      </div>
+    </div>
   </footer>
+</div><!-- /.wrapper-->

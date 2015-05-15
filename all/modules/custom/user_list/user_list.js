@@ -21,6 +21,7 @@ var UserList = function($, user_data, callback){
 	/* properties */
 	self = this;
 	self.callback = callback || function(self){};
+	self.footerHeight = 0;
   
   /* events */
   var ready = document.createEvent('Event');
@@ -38,7 +39,6 @@ var UserList = function($, user_data, callback){
 	centerMarker = false,
 	midpoint = false,
 	line = false,
-	footerHeight,
 	personWidth,
 	$container = $(classes.list),
 	slickSettings = {
@@ -64,9 +64,6 @@ var UserList = function($, user_data, callback){
 	mapCenter,
   origSettings,
   user_data = user_data || false;
-  setVariables();
-  setPositions();
-  initMap();
   $('.view-next').on('click', function(){
     if(!$(this).hasClass("disabled")){
       self.fetchNextUsers(self.slidesToShow);
@@ -81,7 +78,7 @@ var UserList = function($, user_data, callback){
   
   $(window).resize(function(){
      waitForFinalEvent(function () {
-        setVariables();
+        self.setVariables();
         self.fillUsers();
     		//show items depending on screen width
     		slickSettings.slidesToShow = self.slidesToShow;
@@ -94,7 +91,7 @@ var UserList = function($, user_data, callback){
 	
 	function adjustScreen(){
 		var h2 = $("window").height();
-		$(".main-container").height(h2 - footerHeight);
+		$(".main-container").height(h2 - self.footerHeight);
 		width = $(window).width();
 	}
 	
@@ -182,10 +179,10 @@ var UserList = function($, user_data, callback){
   		});
   	}
 	}
-	function setVariables(){
+	self.setVariables = function(){
 	  width         = $(window).width()
     personWidth   = $(".person").width();
-    footerHeight  = $("#map").height();
+    self.footerHeight  = $("#map").height();
     personWidth   = $(".person").width();
     self.slidesToShow = Math.floor(width/personWidth);
     
@@ -195,12 +192,12 @@ var UserList = function($, user_data, callback){
     return $(".current-user").length;
   }
 	
-	function setPositions(){
+	self.setPositions = function(){
 		var w = parseInt($(classes.list).find(classes.node).outerWidth());
 		var n = $(classes.list).find(classes.node).length;
 		
 		
-		setVariables();
+		self.setVariables();
 		
 		//set height of view-next and view-prev
 		$(".view-next, .view-prev").css("height",$(classes.node).height());
@@ -280,7 +277,7 @@ var UserList = function($, user_data, callback){
 	function initUserNodes(accounts){
 		//  find width of the nodes
 		adjustScreen();
-		setPositions();
+		self.setPositions();
 		
 		if(!accounts && typeof(user_data) != "undefined"){
   		accounts = user_data;
@@ -338,7 +335,7 @@ var UserList = function($, user_data, callback){
       centerMarker.setMap(null);
     }
     centerMarker = new google.maps.Marker({position:startLatlng, map:map, cursor:'pointer', icon:theme_dir+"/images/start_arrow.png"});
-    google.maps.event.addListener(centerMarker, 'click', function(){
+    var zoomLine = function(){
       if(map.getCenter() == midPoint){
         if(map.getZoom() == 21){
           map.setZoom(4);
@@ -348,7 +345,12 @@ var UserList = function($, user_data, callback){
 		  }
 		  map.panTo(midPoint);
 		  map.setCenter(midPoint);
-		});
+		}
+    //make the marker zoom/center on click
+    google.maps.event.addListener(centerMarker, 'click', zoomLine);
+		//also make the line do that
+		google.maps.event.addListener(line, 'click', zoomLine);
+		//draw dotted lines from the main line to the user's lat/lng
 		endPoint = 0;
 		for(var i in accounts){
 			var user = accounts[i];
@@ -415,6 +417,13 @@ var UserList = function($, user_data, callback){
 	}
   
   /* methods */
+  
+  self.init = function(){
+    self.setVariables();
+    self.setPositions();
+    initMap();
+    console.log('test');
+  }
   
   self.fillUsers = function(){
     if(self.slidesToShow > $(classes.node).length){
@@ -559,7 +568,9 @@ var UserList = function($, user_data, callback){
 	    self.goToUser($user);
 	  }
 	}
-		
+	
+  self.init();
+	
 	return self;
 }
 

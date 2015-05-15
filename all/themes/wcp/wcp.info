@@ -9,13 +9,10 @@ base theme = bootstrap
 ;;;;;;;;;;;;;;;;;;;;;
 
 regions[navigation]     = 'Navigation'
-regions[header]         = 'Top Bar' 
 regions[highlighted]    = 'Highlighted'
-regions[help]           = 'Help'
 regions[content]        = 'Content'
-regions[sidebar_first]  = 'Primary'
-regions[sidebar_second] = 'Secondary'
 regions[footer]         = 'Footer'
+regions[footer_top]     = 'Footer Top'
 regions[page_top]       = 'Page top'
 regions[page_bottom]    = 'Page bottom'
 
@@ -27,6 +24,7 @@ regions[page_bottom]    = 'Page bottom'
 
 stylesheets[all][] = css/vendor/bootstrap.min.css
 stylesheets[all][] = css/vendor/bootstrap-colorpicker.css
+stylesheets[all][] = css/vendor/jquery.jscrollpane.css
 stylesheets[all][] = css/base.css
 stylesheets[all][] = css/layout.css
 stylesheets[all][] = css/component.css
@@ -46,6 +44,8 @@ stylesheets[all][] = css/modifiers.css
 
 scripts[] = js/vendor/bootstrap.min.js
 scripts[] = js/vendor/bootstrap-colorpicker.min.js
+scripts[] = js/vendor/jquery.jscrollpane.min.js
+scripts[] = js/vendor/jquery.mousewheel.js
 
 ;
 ; ; Disable BootstrapCDN if using Bootstrap source files in your sub-theme.
