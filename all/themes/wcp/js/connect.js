@@ -35,7 +35,7 @@
     $(".login-register").toggleClass("visible");
       $("body").toggleClass("freeze");
       if(!modalPane){ 
-        modalPane = $(".login-register.modal .modal__inner").jScrollPane({autoReinitialise:true, autoReinitialiseDelay:200});
+        //modalPane = $(".login-register.modal .modal__inner").jScrollPane({autoReinitialise:true, autoReinitialiseDelay:200});
       }
       setTimeout(function(){
         $(".login-register").toggleClass("fade");
@@ -48,15 +48,15 @@
   
   Drupal.behaviors.wcp = {
   attach: function (context, settings) {
-  function initPage(){
+    function initPage(){
       setVariables();
       setPositions();
     }
     function setVariables(){
-      footerHeight = $(".footer").outerHeight();
+      footerHeight = $(".footer").outerHeight() + 10;
     }
     function setPositions(){
-      $(".push").css({height:footerHeight});
+      $(".push, .footer").css({height:footerHeight});
       $(".content-wrapper, .not-front .wrapper").css({marginBottom: -footerHeight, paddingBottom:footerHeight});
       $(".region-content").css({minHeight: $(".content-wrapper").height() - $(".front-map").height()});
     }

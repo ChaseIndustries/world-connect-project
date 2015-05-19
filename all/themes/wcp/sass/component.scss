@@ -25,6 +25,7 @@
   left:0;
   height:$map-height;
   width:100%;
+  z-index:0;
 	#map {
 	  width:100%;
 		height:$map-height;
@@ -67,6 +68,10 @@
       position: relative;
       left:0;
       @include transition(.5s all);
+      @include opacity(0);
+      &.slick-initialized {
+        @include opacity(1);
+      }
     }
 	}
 	.views-row {
@@ -82,18 +87,31 @@
 	  }
 	  .person__loader {
   	  @include transition(.3s all);
-  	  @include absolute-center();
+  	  @include absolute-x();
   	  max-width:60%;
-  	  top:100px;
+  	  top:140px;
   	  position:relative;
 	  }
 	  .person__body {
-	    @include opacity(0);
-	    @include transition(.3s all);
+	    img {
+	      @include opacity(0);
+	      @include transition(.3s all);
+	    }
+			display:block;
+			.person__body__person {
+				max-height:100%;
+				width:100%;
+				height:auto;
+				
+				&.man { }
+				&.woman { }
+			}
 	  }
 	  &.visible {
 	    .person__body {
-  	    @include opacity(1);
+	      img {
+  	      @include opacity(1);
+  	    }
   	  }
   	  .person__loader {
     	  @include opacity(0);
@@ -166,18 +184,6 @@
   			z-index:0;
 			}
 		}
-		
-		.person__body {
-			display:block;
-			.person__body__person {
-				max-height:100%;
-				width:100%;
-				height:auto;
-				
-				&.man { }
-				&.woman { }
-			}
-		}
 	}
 	.current-user {
 	}
@@ -235,12 +241,14 @@ hr {
 
 .modal {
   width:100%;
-  height:100%;
-  position:fixed;
+  min-height:100%;
+  padding-bottom:$spacing;
+  position:absolute;
   left:0;
   top:0;
   content:"";
   z-index:100;
+  overflow: auto;
   @include transition(.3s all);
   @include opacity(0);
   background:rgba(0,0,0,.4);
@@ -251,12 +259,10 @@ hr {
     @include opacity(1);
   }
   .modal__inner {
-    position:fixed;
+    position:absolute;
     left:50%;
     top:10%;
     @include translateX(-50%);
-    height:80%;
-    overflow: hidden;
     z-index:200;
     background:$base;
     font-size:.6em;
@@ -437,14 +443,11 @@ fieldset.panel {
   margin-bottom:0;
 }
 .slick-track {
-  overflow:hidden;
-  &::after{
+  .slick-ground {
     content:"";
-    position:absolute;
-    width:100%;
+    @include absolute-x();
     bottom:-9px;
     height:30px;
-    background:url('../images/ground.png') repeat-x top;
-    left:0;
+    background:url('../images/ground.png') repeat-x top left;
   }
 }

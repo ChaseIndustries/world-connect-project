@@ -116,6 +116,7 @@ if(!$logged_in || $is_admin){ ?>
 	var theme_dir = "<?=$theme_dir?>";
 	</script>
 	<div class="content-wrapper front">
+	<div class='map-loader'><img src='<?php print base_path() . drupal_get_path('theme','wcp') . '/images/loader_2.svg'?>'/><br>Loading Map...</div>
 	<div class="front-map"><div id="map"></div></div>
     <?php print render($page['content']); ?>
     <!--

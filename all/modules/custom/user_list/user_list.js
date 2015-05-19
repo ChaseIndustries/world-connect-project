@@ -16,16 +16,11 @@ var waitForFinalEvent = (function () {
   };
 })();
 
-var UserList = function($, user_data, callback){
+var UserList = function(user_data){
   
 	/* properties */
 	self = this;
-	self.callback = callback || function(self){};
 	self.footerHeight = 0;
-  
-  /* events */
-  var ready = document.createEvent('Event');
-  ready.initEvent('list-ready', true, true);
   
   /* vars */
   var map,
@@ -34,13 +29,12 @@ var UserList = function($, user_data, callback){
 		inner:".view-inner",
 		node:".person",
 	},
+	$,
 	markers = [],
 	defaultStyles,
 	centerMarker = false,
 	midpoint = false,
 	line = false,
-	personWidth,
-	$container = $(classes.list),
 	slickSettings = {
   		swipeToSlide   : true,
   		focusOnSelect  : true,
@@ -58,35 +52,14 @@ var UserList = function($, user_data, callback){
 		 scrollwheel: false
 		},
   prevZoom = mapSettings.zoom,
-  width,
   scrollPane,
 	requests = {},
 	mapCenter,
   origSettings,
-  user_data = user_data || false;
-  $('.view-next').on('click', function(){
-    if(!$(this).hasClass("disabled")){
-      self.fetchNextUsers(self.slidesToShow);
-    }
-  });
+  user_data = user_data || false,
+  width,
+  personWidth;
   
-  $('.view-prev').on('click', function(){
-    if(!$(this).hasClass("disabled")){
-      self.fetchPrevUsers(self.slidesToShow);
-    }
-  });
-  
-  $(window).resize(function(){
-     waitForFinalEvent(function () {
-        self.setVariables();
-        self.fillUsers();
-    		//show items depending on screen width
-    		slickSettings.slidesToShow = self.slidesToShow;
-        scrollPane.slick('slickSetOption', 'slidesToShow', slickSettings.slidesToShow, true);
-        
-     }, 500, "global");
-  });
-
 /* functions */
 	
 	function adjustScreen(){
@@ -95,7 +68,7 @@ var UserList = function($, user_data, callback){
 		width = $(window).width();
 	}
 	
-	function initMap(){
+	function initMap(callback){
 		/* 365,222 feet in 1 degree of latitude */
 		defaultStyles = [
     {
@@ -131,9 +104,10 @@ var UserList = function($, user_data, callback){
     map = new google.maps.Map(document.getElementById("map"), mapSettings);
 		defaultZoom = map.getZoom();
 		google.maps.event.addListenerOnce(map, 'idle', function(){
+		  $('.map-loader').fadeOut(500);
 		  initUserNodes(user_data);
 		  self.fillUsers();
-      self.callback(self);
+      callback(self);
 		});
 		map.addListener("zoom_changed",function(){
 		  mapSettings.zoom = map.getZoom();
@@ -196,36 +170,51 @@ var UserList = function($, user_data, callback){
 		var w = parseInt($(classes.list).find(classes.node).outerWidth());
 		var n = $(classes.list).find(classes.node).length;
 		
-		
 		self.setVariables();
 		
 		//set height of view-next and view-prev
 		$(".view-next, .view-prev").css("height",$(classes.node).height());
 		
-		if(!scrollPane){
-		  slickSettings.initialSlide = logged_in() ? $(".current-user").index(".views-row") : 1;
-		  slickSettings.slidesToShow = self.slidesToShow;
-      if(totalRows.uids_greater - $(classes.node).length <= 0){
-        $(".view-next").addClass("disabled");
-      }
-      
-      if(totalRows.uids_less <= $(classes.node).length || !logged_in()){
-        $(".view-prev").addClass("disabled");
-      }
-  		scrollPane = $(classes.list).find(".view-content").slick(slickSettings);
-  		scrollPane.on('afterChange', function(slick, currentSlide){
-  		  var curSlide = scrollPane.slick("slickCurrentSlide");
-    		if(scrollPane.slick("slickCurrentSlide") + 1 == $(classes.node).length){
-      		//ajax
-      		if(!requests.fetchNextUsers && !requests.fetchPrevUsers){
-        		self.fetchNextUsers(self.slidesToShow);
+    // Initialize the slick carousel
+		initSlick();
+	}
+	
+	function initSlick(){
+	  if(!scrollPane){
+  	  slickSettings.initialSlide = logged_in() ? $(".current-user").index(".views-row") : 1;
+  		  slickSettings.slidesToShow = self.slidesToShow;
+        if(totalRows.uids_greater - $(classes.node).length <= 0){
+          $(".view-next").addClass("disabled");
+        }
+        
+        if(totalRows.uids_less <= $(classes.node).length || !logged_in()){
+          $(".view-prev").addClass("disabled");
+        }
+    		scrollPane = $(classes.list).find(".view-content").slick(slickSettings);
+    		scrollPane.on('afterChange', function(slick, currentSlide){
+    		  var curSlide = scrollPane.slick("slickCurrentSlide");
+      		if(scrollPane.slick("slickCurrentSlide") + 1 == $(classes.node).length){
+        		//ajax
+        		if(!requests.fetchNextUsers && !requests.fetchPrevUsers){
+          		self.fetchNextUsers(self.slidesToShow);
+        		}
       		}
-    		}
-  		});
-		}
+    		});
+        
+        // On initialization
+        scrollPane.on('reInit', function(slick){
+          // Add the ground layer
+          $('.slick-ground').remove();
+          $('.slick-track').append('<div class="slick-ground" />');
+          $('.slick-ground').width($('.slick-track').width() + $(window).width() * 2);
+        });
+
+    }
 	}
 	
 	function changeIcons(){
+	// when zoomed in, this changes the icons of the markers on the maps, depending
+	// on zoom level.  It's just a neat little feature.
   	if(prevZoom == mapSettings.zoom){
     	return false;
   	}
@@ -249,50 +238,8 @@ var UserList = function($, user_data, callback){
   	}
 	}
 	
-	function colorUsers(accounts){
-  	$.each(accounts,function(i,v){
-    	var uid = v.uid, 
-    	attributes = {};
-    	//loop through fields
-      $.each(v, function(key,field){
-        if(key.indexOf("field_") != -1){
-          if(typeof(field["und"]) == "object"){
-            if(typeof(field["und"][0]["rgb"]) == "string"){
-              attributes[key] = field["und"][0]["rgb"];
-            }
-          }
-        }
-      });
-    	var el = $(".person[rel='"+uid+"']");
-    	if(el.length){
-      	image = el.find(".person__svg");
-      	el.addClass("visible");
-      	image.on("load", function(){
-      	  el.addClass("visible");
-      	});
-    	}
-  	});
-	} 
-	 
-	function initUserNodes(accounts){
-		//  find width of the nodes
-		adjustScreen();
-		self.setPositions();
-		
-		if(!accounts && typeof(user_data) != "undefined"){
-  		accounts = user_data;
-		}
-		//show the users
-		colorUsers(accounts);
-		
-		if(!accounts){
-  		return false;
-		}
-		//remove the initial dummy row used for measuring width
-    if($(".initial").length){
-      $(".initial").remove();
-    }
-		var armSpan = 5.5 //in feet,
+	function drawUserLine(accounts){
+    var armSpan = 5.5 //in feet,
 		startPoint=0,
 		endPoint=0.
     startLatlng = new google.maps.LatLng(0,startPoint);
@@ -331,6 +278,7 @@ var UserList = function($, user_data, callback){
     midPoint = new google.maps.LatLng(startPoint / 2 , endPoint / 2);
     map.setCenter(midPoint);
     //add a marker there
+    //remove center marker if it exists (since this may be a new line)
     if(centerMarker){
       centerMarker.setMap(null);
     }
@@ -352,6 +300,7 @@ var UserList = function($, user_data, callback){
 		google.maps.event.addListener(line, 'click', zoomLine);
 		//draw dotted lines from the main line to the user's lat/lng
 		endPoint = 0;
+		
 		for(var i in accounts){
 			var user = accounts[i];
       function drawConnectingLine(latlng, user){
@@ -406,7 +355,31 @@ var UserList = function($, user_data, callback){
         drawConnectingLine(latlng, user);   
        } 
       }
-		} /* for i in user_data */
+		} /* for i in accounts */
+	}
+	 
+	function initUserNodes(accounts){
+	  
+	  // If data is not supplied, fail
+		if(!accounts){
+  		return false;
+		}
+		
+		adjustScreen();
+		self.setPositions();
+		
+		if(!accounts && typeof(user_data) != "undefined"){
+  		accounts = user_data;
+		}
+
+		// Remove the initial dummy row used for measuring width
+    if($(".initial").length){
+      $(".initial").remove();
+    }
+    
+    // Draw the line on the map connecting the users
+    drawUserLine(accounts);
+		
 		//var bounds = new google.maps.LatLngBounds(new google.maps.LatLng(-9/365220,startPoint),new google.maps.LatLng((-9+h)/365220,endPoint));
 		//create an options object
 		//create line from origin to center of equator line (ie connection)	
@@ -418,11 +391,44 @@ var UserList = function($, user_data, callback){
   
   /* methods */
   
-  self.init = function(){
+  self.init = function(callback){
+    var callback = callback || function(){};
+    $ = jQuery.noConflict();
     self.setVariables();
     self.setPositions();
-    initMap();
-    console.log('test');
+    initMap(callback);
+
+    /* Init Listeners */
+      
+    $('.view-next').on('click', function(){
+      if(!$(this).hasClass("disabled")){
+        self.fetchNextUsers(self.slidesToShow);
+      }
+    });
+    
+    $('.view-prev').on('click', function(){
+      if(!$(this).hasClass("disabled")){
+        self.fetchPrevUsers(self.slidesToShow);
+      }
+    });
+    
+    $(window).resize(function(){
+       waitForFinalEvent(function () {
+          self.setVariables();
+          self.fillUsers();
+      		//show items depending on screen width
+      		slickSettings.slidesToShow = self.slidesToShow;
+          scrollPane.slick('slickSetOption', 'slidesToShow', slickSettings.slidesToShow, true);
+          
+       }, 200, "global");
+    });
+  }
+  
+  // Called immediately after an svg loads, embedded
+  // in the <img /> tag
+  self.showUser = function(user){
+    var par = user.parentNode.parentNode;
+    par.setAttribute('class', par.className + " visible");
   }
   
   self.fillUsers = function(){
@@ -499,7 +505,7 @@ var UserList = function($, user_data, callback){
             for(var i = initial; count < accounts.length ; i++){ //-1 to account for view-next button
               account = accounts[count];
               var slide = $('.slick-slide[data-slick-index='+i+']');
-              slide.empty().append(account.html).find(".person").removeClass("new").addClass("visible");
+              slide.empty().append(account.html).find(".person").removeClass("new");
               count++;
             }
             
@@ -540,7 +546,7 @@ var UserList = function($, user_data, callback){
             var count = 0;
             for(var i = 0; count < accounts.length ; i++){ //-1 to account for view-next button
               account = accounts[count];
-              $('.views-row[data-slick-index='+i+']').empty().append(account.html).find(".person").addClass("visible");
+              $('.views-row[data-slick-index='+i+']').empty().append(account.html).find(".person");
               count++;
             }
             $(".view-next").css("margin-left","").removeClass("faded");
@@ -569,20 +575,20 @@ var UserList = function($, user_data, callback){
 	  }
 	}
 	
-  self.init();
-	
 	return self;
 }
 
+var user_list = new UserList(user_data);  	
 window.onload = function(){
 	var $ = jQuery.noConflict();
 	if(typeof(user_data)=="undefined"){
   	console.log("Did not get user data!");
   	return false;
 	}
-	var user_list = new UserList($, user_data, function(user_list){
-      //fetch users
-    	user_list.goToCurrentUser();
-	});  
+	user_list.init(function(){
+    //fetch users
+    user_list.setPositions();
+    user_list.goToCurrentUser();
+	});
 }
 

@@ -22,5 +22,5 @@
       </div>
     </div>
       <div class="person__body">
-      <img type="image/svg" src="svg/user/<?=$user->uid?>" class="person__svg" width="100%" height="100%" /></div>
+      <img type="image/svg" src="svg/user/<?=$user->uid?>" class="person__svg" onload='user_list.showUser(this)' width="100%" height="100%" /></div>
 </<?php print $ds_content_wrapper ?>>

@@ -31,7 +31,8 @@
   top: 0;
   left: 0;
   height: 400px;
-  width: 100%; }
+  width: 100%;
+  z-index: 0; }
   .front-map #map {
     width: 100%;
     height: 400px;
@@ -70,7 +71,12 @@
     -moz-transition: all 0.5s;
     -o-transition: all 0.5s;
     -webkit-transition: all 0.5s;
-    transition: all 0.5s; }
+    transition: all 0.5s;
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+    opacity: 0; }
+    .view-list-users .view-inner .view-content.slick-initialized {
+      filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+      opacity: 1; }
   .view-list-users .views-row {
     display: inline-block;
     vertical-align: middle;
@@ -106,29 +112,27 @@
       transition: all 0.3s;
       position: absolute;
       left: 50%;
-      top: 50%;
       -moz-transform: translateX(-50%);
       -ms-transform: translateX(-50%);
       -webkit-transform: translateX(-50%);
       transform: translateX(-50%);
-      -moz-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-      -webkit-transform: translateY(-50%);
-      transform: translateY(-50%);
-      -moz-transform: translate3d(-50%, -50%, 0);
-      -webkit-transform: translate3d(-50%, -50%, 0);
-      transform: translate3d(-50%, -50%, 0);
       max-width: 60%;
-      top: 100px;
+      top: 140px;
       position: relative; }
     .view-list-users .person .person__body {
-      filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
-      opacity: 0;
-      -moz-transition: all 0.3s;
-      -o-transition: all 0.3s;
-      -webkit-transition: all 0.3s;
-      transition: all 0.3s; }
-    .view-list-users .person.visible .person__body {
+      display: block; }
+      .view-list-users .person .person__body img {
+        filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+        opacity: 0;
+        -moz-transition: all 0.3s;
+        -o-transition: all 0.3s;
+        -webkit-transition: all 0.3s;
+        transition: all 0.3s; }
+      .view-list-users .person .person__body .person__body__person {
+        max-height: 100%;
+        width: 100%;
+        height: auto; }
+    .view-list-users .person.visible .person__body img {
       filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
       opacity: 1; }
     .view-list-users .person.visible .person__loader {
@@ -192,12 +196,6 @@
         bottom: -5px;
         content: " ";
         z-index: 0; }
-    .view-list-users .person .person__body {
-      display: block; }
-      .view-list-users .person .person__body .person__body__person {
-        max-height: 100%;
-        width: 100%;
-        height: auto; }
 
 hr {
   border-color: #1d8c49; }
@@ -247,12 +245,14 @@ hr {
 
 .modal {
   width: 100%;
-  height: 100%;
-  position: fixed;
+  min-height: 100%;
+  padding-bottom: 15px;
+  position: absolute;
   left: 0;
   top: 0;
   content: "";
   z-index: 100;
+  overflow: auto;
   -moz-transition: all 0.3s;
   -o-transition: all 0.3s;
   -webkit-transition: all 0.3s;
@@ -266,15 +266,13 @@ hr {
     filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
     opacity: 1; }
   .modal .modal__inner {
-    position: fixed;
+    position: absolute;
     left: 50%;
     top: 10%;
     -moz-transform: translateX(-50%);
     -ms-transform: translateX(-50%);
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
-    height: 80%;
-    overflow: hidden;
     z-index: 200;
     background: #26B65F;
     font-size: .6em;
@@ -422,13 +420,14 @@ fieldset.panel {
 .slick-slider {
   margin-bottom: 0; }
 
-.slick-track {
-  overflow: hidden; }
-  .slick-track::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    bottom: -9px;
-    height: 30px;
-    background: url("../images/ground.png") repeat-x top;
-    left: 0; }
+.slick-track .slick-ground {
+  content: "";
+  position: absolute;
+  left: 50%;
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  bottom: -9px;
+  height: 30px;
+  background: url("../images/ground.png") repeat-x top left; }
