@@ -1,8 +1,8 @@
 (function($){
 
   // Variables
-  var footerHeight = $("footer").height();
-
+  var vars = {};
+  
   if($(".field-type-color-field-rgb input").length){
     $(".field-type-color-field-rgb input").each(function(i){
       var self = this,
@@ -53,12 +53,16 @@
       setPositions();
     }
     function setVariables(){
-      footerHeight = $(".footer").outerHeight() + 10;
+      vars.footerHeight  = $(".footer").height();
+      vars.winHeight     = $(window).height(),
+      vars.winWidth      = $(window).width();
+      vars.contentHeight = $('.content-wrapper').height();
     }
     function setPositions(){
-      $(".push, .footer").css({height:footerHeight});
-      $(".content-wrapper, .not-front .wrapper").css({marginBottom: -footerHeight, paddingBottom:footerHeight});
-      $(".region-content").css({minHeight: $(".content-wrapper").height() - $(".front-map").height()});
+      $(".push, .footer").css({ height : vars.footerHeight });
+      $(".content-wrapper, .not-front .wrapper").css({marginBottom: - vars.footerHeight });
+     // $(".front-map").height(vars.contentHeight - vars.footerHeight);
+      //$(".region-content").css({minHeight: $(".content-wrapper").height() - $(".front-map").height()});
     }
     $(window, context).resize(function(){
       initPage();

@@ -1,0 +1,18 @@
+<?php
+
+function fblogin_simple_fb_scope_info($scope) {
+  //Modify the scope array
+  //by default the module requests only "email"
+  //Simple_FB_Publish module adds "publish_stream" to the scope
+  //You can add more here
+  $scope = "user_location";
+  dpm($scope);
+  return $scope;
+}
+
+function fblogin_simple_fb_connect_register_alter(&$fields, $fb_user_profile) {
+  //Do stuff with $fields
+  dpm($fields);
+  dpm($fb_user_profile);
+}
+

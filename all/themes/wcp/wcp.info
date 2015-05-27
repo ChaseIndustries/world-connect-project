@@ -47,6 +47,8 @@ scripts[] = js/vendor/bootstrap-colorpicker.min.js
 scripts[] = js/vendor/jquery.jscrollpane.min.js
 scripts[] = js/vendor/jquery.mousewheel.js
 
+scripts[] = js/functions.js
+
 ;
 ; ; Disable BootstrapCDN if using Bootstrap source files in your sub-theme.
 settings[bootstrap_cdn] = ''

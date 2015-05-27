@@ -13,12 +13,12 @@
  */
 html, body {
   font-family: "Lato";
-  color: #fcf6be; }
+  color: #fcf6be;
+  height: 100%; }
 
 h1 {
   color: #FFB800;
-  font-size: 1.8em;
-  text-shadow: 0px 1px 0px #146233; }
+  font-size: 1.8em; }
   h1.page-header {
     border: none; }
 
@@ -36,7 +36,14 @@ a, a:hover, a:focus {
 
 label {
   font-size: 1.5em;
-  text-transform: uppercase;
   font-weight: normal;
   font-family: "Bitter";
   color: #FFB800; }
+
+.checkbox, .radio {
+  padding-left: 5px; }
+  .checkbox input, .radio input {
+    margin-left: 0;
+    position: relative; }
+  .checkbox label, .radio label {
+    font-size: 1em; }

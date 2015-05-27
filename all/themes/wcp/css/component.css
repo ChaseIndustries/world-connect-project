@@ -30,14 +30,18 @@
   z-index: 0;
   top: 0;
   left: 0;
-  height: 400px;
+  height: 100%;
   width: 100%;
-  z-index: 0; }
+  z-index: 0;
+  min-height: 200px; }
   .front-map #map {
     width: 100%;
-    height: 400px;
+    height: 100%;
     z-index: 200;
-    position: relative; }
+    min-height: 200px;
+    position: absolute;
+    left: 0;
+    top: 0; }
 
 .navbar {
   -moz-border-radius: 0;
@@ -53,17 +57,7 @@
 .view-list-users {
   width: 100%;
   min-height: 100%;
-  z-index: 0;
-  /*
-    overflow-y:hidden;
-    overflow-x:auto;
-    white-space:nowrap;
-  */
- /*
- &.logged-out {
-    padding-left:75%;
-  }
-*/ }
+  z-index: 0; }
   .view-list-users .view-inner .view-content {
     text-align: right;
     position: relative;
@@ -77,13 +71,15 @@
     .view-list-users .view-inner .view-content.slick-initialized {
       filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
       opacity: 1; }
-  .view-list-users .views-row {
-    display: inline-block;
-    vertical-align: middle;
-    *vertical-align: auto;
-    *zoom: 1;
-    *display: inline;
-    vertical-align: bottom; }
+      .view-list-users .view-inner .view-content.slick-initialized > div {
+        display: block; }
+    .view-list-users .view-inner .view-content > div {
+      display: inline-block;
+      vertical-align: middle;
+      *vertical-align: auto;
+      *zoom: 1;
+      *display: inline;
+      vertical-align: bottom; }
   .view-list-users .views-field-counter {
     display: none; }
   .view-list-users .person {
@@ -214,7 +210,6 @@ hr {
   padding-right: 1.5em;
   background: #FFB800;
   color: #26B65F;
-  text-transform: uppercase;
   font-size: .7em;
   border: 0; }
   .btn.btn--cta, .btn.form-submit, .btn:hover.btn--cta, .btn.form-submit:hover, .btn:focus.btn--cta, .btn.form-submit:focus {
@@ -361,9 +356,8 @@ input.colorpicker-element {
 
 .form-control {
   font-size: 1.2em;
-  height: 45px;
-  line-height: 1.4;
-  padding: 10px 20px; }
+  height: auto;
+  padding: 10px 10px; }
 
 fieldset.panel {
   background: transparent;

@@ -4,7 +4,6 @@ $skin_tone = count($user->field_skin_tone) ? $user->field_skin_tone[LANGUAGE_NON
 $pants_color = count($user->field_pants_color) ?  $user->field_pants_color[LANGUAGE_NONE][0]["rgb"] : false;
 $hair_color = count($user->field_hair_color) ? $user->field_hair_color[LANGUAGE_NONE][0]["rgb"] : false;
 ?>
-<!-- Generator: Adobe Illustrator 16.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="man" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="607.321px" height="603.316px" viewBox="0 32.316 607.321 603.316" enable-background="new 0 32.316 607.321 603.316" xml:space="preserve">
 <g id="field_skin_tone">

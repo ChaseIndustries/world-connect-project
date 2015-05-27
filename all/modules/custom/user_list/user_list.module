@@ -149,7 +149,7 @@ function user_list_page_build(&$page) {
   if ($pos === 0) {
     //only print the markup
     drupal_add_http_header('Content-type', 'image/svg+xml');
-    die($page["content"]["system_main"]["main"]["#markup"]);
+    die($page["footer_top"]["system_main"]["main"]["#markup"]);
   }
 } 
 
@@ -159,5 +159,3 @@ function user_list_generate_svg($uid = NULL){
   return theme('man_svg', array('user' => $user ));
 }
 
-
-?>

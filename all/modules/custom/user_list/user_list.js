@@ -16,7 +16,7 @@ var waitForFinalEvent = (function () {
   };
 })();
 
-var UserList = function(user_data){
+var UserList = function(){
   
 	/* properties */
 	self = this;
@@ -130,7 +130,7 @@ var UserList = function(user_data){
         },{
           "featureType": "poi",
           "stylers": [
-            { "visibility": "on" }
+            { "visibility": "off" }
           ]
         },{
           "featureType": "water",
@@ -159,6 +159,8 @@ var UserList = function(user_data){
     self.footerHeight  = $("#map").height();
     personWidth   = $(".person").width();
     self.slidesToShow = Math.floor(width/personWidth);
+    self.contentHeight = $(".content-wrapper").height();
+    self.footerHeight = $(".footer").height();
     
   }
   
@@ -177,6 +179,8 @@ var UserList = function(user_data){
 		
     // Initialize the slick carousel
 		initSlick();
+		
+		$(".front-map").height(self.contentHeight - self.footerHeight);
 	}
 	
 	function initSlick(){
@@ -391,7 +395,7 @@ var UserList = function(user_data){
   
   /* methods */
   
-  self.init = function(callback){
+  self.init = function(user_data, callback){
     var callback = callback || function(){};
     $ = jQuery.noConflict();
     self.setVariables();
@@ -578,14 +582,15 @@ var UserList = function(user_data){
 	return self;
 }
 
-var user_list = new UserList(user_data);  	
+var user_list = new UserList();
+
 window.onload = function(){
 	var $ = jQuery.noConflict();
 	if(typeof(user_data)=="undefined"){
-  	console.log("Did not get user data!");
+  	//console.log("Did not get user data!");
   	return false;
 	}
-	user_list.init(function(){
+	user_list.init(user_data, function(){
     //fetch users
     user_list.setPositions();
     user_list.goToCurrentUser();

@@ -1,0 +1,5 @@
+name = FB Login With Location
+description = Adds 'user_location' permission to Simple FB Connect module
+core = 7.x
+dependencies[] = simple_fb_connect
+files[] = fblogin.module

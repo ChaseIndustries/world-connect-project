@@ -96,13 +96,12 @@ if(!$logged_in || $is_admin){ ?>
              </div>
             </div>
             <?php } ?>
-<!--
-    		    <div class="col-sm-6 login-register__login">
-    		      <? $user_login_form = drupal_get_form('user_login_block'); ?>
-              <? print(drupal_render($user_login_form)); ?>
-    		    </div>
--->
     		    <div class="col-sm-12 login-register__register">
+    		    		      <label>Login with Facebook:</label>
+		      <div class='fb-login-button'><a href='/user/simple-fb-connect'>Connect with Facebook</a></div>
+<div id="status">
+</div>
+          <br>
     		    <? $register_form = drupal_get_form('user_register_form'); ?>
     		    <? print(drupal_render($register_form)); ?>
     		    </div>
@@ -119,22 +118,6 @@ if(!$logged_in || $is_admin){ ?>
 	<div class='map-loader'><img src='<?php print base_path() . drupal_get_path('theme','wcp') . '/images/loader_2.svg'?>'/><br>Loading Map...</div>
 	<div class="front-map"><div id="map"></div></div>
     <?php print render($page['content']); ?>
-    <!--
-<div class='view-list-users'>
-      <div class='view-inner'>
-        <div class='view-content'>
-        <div class="view-more"><a href="javascript:;"><img width="100%" src="/sites/all/themes/wcp/images/arrow.svg" /></a></div>
-          <div class='views-row initial'>
-            <div class="person">
-              <div class='person__body'>
-                <img src="/sites/all/themes/wcp/images/people/man.svg" class='person__svg'/>
-              </div>
-          </div>
-        </div>
-      </div>
-    </div>
--->
-
 <div class="push"></div>
 </div>
   <footer class="footer">
@@ -143,6 +126,14 @@ if(!$logged_in || $is_admin){ ?>
     </div>
     <div class="footer__bottom">
       <div class="footer__inner container">
+         <div align="center">
+      <div
+  class="fb-like"
+  data-share="true"
+  data-width="450"
+  data-show-faces="true">
+</div>
+      </div>
         <?php print render($page['footer']); ?>
       </div>
     </div>

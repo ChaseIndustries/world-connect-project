@@ -161,10 +161,13 @@
         <?php if (!empty($title)): ?>
           <h1 class="page-title"><?php print $title; ?></h1>
         <?php endif; ?>
+        <?php if($messages) : ?>
         <div class="messages-container">
           <?php print $messages; ?>
         </div>
+        <?php endif; ?>
         <?php print render($page['content']); ?>
+        <?php print render($page['footer_top']); ?>
       </div>
   	</div>
 		<div class="push"></div>
@@ -172,6 +175,14 @@
 <footer class="footer">
    <div class="footer__bottom">
       <div class="footer__inner container">
+      <div align="center">
+      <div
+  class="fb-like"
+  data-share="true"
+  data-width="450"
+  data-show-faces="true">
+</div>
+      </div>
         <?php print render($page['footer']); ?>
       </div>
     </div>

@@ -3,12 +3,12 @@
 html,body {
   font-family:$sans;
   color:$text;
+  height:100%;
 }
 
 h1 {
-  color:#FFB800;
+  color:$highlight-2;
   font-size:1.8em;
-  @include _text-shadow();
   &.page-header {
     border:none;
   }
@@ -34,8 +34,18 @@ a {
 
 label {
   font-size:1.5em;
-  text-transform: uppercase;
   font-weight: normal;
   font-family:$headings;
   color:$highlight-2;
+}
+
+.checkbox, .radio {
+  input {
+    margin-left:0;
+    position:relative;
+  }
+  padding-left:5px;
+  label {
+    font-size:1em;
+  }
 }
