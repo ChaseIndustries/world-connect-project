@@ -68,7 +68,7 @@ var UserList = function(){
 		width = $(window).width();
 	}
 	
-	function initMap(callback){
+	function initMap(){
 		/* 365,222 feet in 1 degree of latitude */
 		defaultStyles = [
     {
@@ -106,9 +106,7 @@ var UserList = function(){
 		google.maps.event.addListenerOnce(map, 'idle', function(){
 		  $('.map-loader').fadeOut(500);
 		  self.fillUsers();
-		  if (initUserNodes(user_data)) {
-        callback(self);
-      }
+		  initUserNodes(user_data);
 		});
 		map.addListener("zoom_changed",function(){
 		  mapSettings.zoom = map.getZoom();
@@ -161,7 +159,7 @@ var UserList = function(){
     personWidth        = $(".person").width();
     self.slidesToShow  = Math.floor(width/personWidth);
     self.contentHeight = $(".content-wrapper").height();
-    self.footerHeight  = $(".footer").outerHeight();
+    self.footerHeight  = $(".footer__top").height() + $(".footer__bottom").height();
     
   }
   
@@ -298,6 +296,7 @@ var UserList = function(){
 		  }
 		  map.panTo(midPoint);
 		  map.setCenter(midPoint);
+		  self.callback(self);
 		}
     //make the marker zoom/center on click
     google.maps.event.addListener(centerMarker, 'click', zoomLine);
@@ -351,7 +350,7 @@ var UserList = function(){
 					    map.panTo(latlng);
 					    map.setCenter(latlng);
 					  }
-					});					
+					});
 			}
 			
       if(typeof(user["field_location"]["und"]) == 'object'){
@@ -402,11 +401,11 @@ var UserList = function(){
   /* methods */
   
   self.init = function(user_data, callback){
-    var callback = callback || function(){};
+    self.callback = callback || function(){};
     $ = jQuery.noConflict();
     self.setVariables();
     self.setPositions();
-    initMap(callback);
+    initMap();
 
     /* Init Listeners */
       
