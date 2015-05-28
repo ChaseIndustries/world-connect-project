@@ -2,18 +2,19 @@
 
 html, body {
   color:#fff;
-  font-size:16px;
   height:100%;
+}
+
+body {
+ font-size:16px;
   @media(max-width:$break-xs){
     font-size:14px;
-  } 
-}
-body.not-front {
-  font-size:16px;
-}
-body {
+  }
   &.freeze {
     position:fixed;
+    @media(max-width:$break-xs){
+      position:inherit;
+    }
     width:100%;
     height:100%;
     left:0;
@@ -141,9 +142,12 @@ header#navbar {
 .front {
   .content-wrapper {
     min-height:100%;
+    .inner {
+      min-height:200px;
+    }
   }
   .content-wrapper, .footer__top, .modal {
-    font-size:28px;
+    font-size:140%;
   }
   
 }
@@ -160,6 +164,9 @@ header#navbar {
 
 .map-loader {
   position:fixed;
+  @media(max-width:$break-xs){
+    position:absolute;
+  }
   left:0;
   top:0;
   text-align:center;

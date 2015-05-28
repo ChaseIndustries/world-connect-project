@@ -119,6 +119,7 @@ if(!$logged_in || $is_admin){ ?>
 	<div class="front-map"><div id="map"></div></div>
     <?php print render($page['content']); ?>
 <div class="push"></div>
+<div class='inner'></div>
 </div>
   <footer class="footer">
     <div class="footer__top">

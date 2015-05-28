@@ -53,15 +53,16 @@
       setPositions();
     }
     function setVariables(){
-      vars.footerHeight  = $(".footer").height();
+      vars.footerHeight  = $(".footer").outerHeight();
       vars.winHeight     = $(window).height(),
       vars.winWidth      = $(window).width();
       vars.contentHeight = $('.content-wrapper').height();
     }
     function setPositions(){
+      $(".footer, .push, .front-map").css({'height' : '', 'margin-bottom' : ''});
       $(".push, .footer").css({ height : vars.footerHeight });
       $(".content-wrapper, .not-front .wrapper").css({marginBottom: - vars.footerHeight });
-     // $(".front-map").height(vars.contentHeight - vars.footerHeight);
+      $(".front-map").height(vars.contentHeight - vars.footerHeight);
       //$(".region-content").css({minHeight: $(".content-wrapper").height() - $(".front-map").height()});
     }
     $(window, context).resize(function(){

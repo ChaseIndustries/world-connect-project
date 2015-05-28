@@ -105,9 +105,10 @@ var UserList = function(){
 		defaultZoom = map.getZoom();
 		google.maps.event.addListenerOnce(map, 'idle', function(){
 		  $('.map-loader').fadeOut(500);
-		  initUserNodes(user_data);
 		  self.fillUsers();
-      callback(self);
+		  if (initUserNodes(user_data)) {
+        callback(self);
+      }
 		});
 		map.addListener("zoom_changed",function(){
 		  mapSettings.zoom = map.getZoom();
@@ -154,13 +155,13 @@ var UserList = function(){
   	}
 	}
 	self.setVariables = function(){
-	  width         = $(window).width()
-    personWidth   = $(".person").width();
-    self.footerHeight  = $("#map").height();
-    personWidth   = $(".person").width();
-    self.slidesToShow = Math.floor(width/personWidth);
+	
+	  width              = $(window).width()
+    personWidth        = $(".person").width();
+    personWidth        = $(".person").width();
+    self.slidesToShow  = Math.floor(width/personWidth);
     self.contentHeight = $(".content-wrapper").height();
-    self.footerHeight = $(".footer").height();
+    self.footerHeight  = $(".footer").outerHeight();
     
   }
   
@@ -356,9 +357,12 @@ var UserList = function(){
       if(typeof(user["field_location"]["und"]) == 'object'){
        var latlng = new google.maps.LatLng(user["field_location"]["und"][0]["lat"],user["field_location"]["und"][0]["lng"]);
        if(typeof(user.connectLine) == "undefined"){
-        drawConnectingLine(latlng, user);   
-       } 
+        drawConnectingLine(latlng, user);
+       }  
       }
+       if(i == accounts.length - 1){
+        return true;
+       }
 		} /* for i in accounts */
 	}
 	 
@@ -382,7 +386,9 @@ var UserList = function(){
     }
     
     // Draw the line on the map connecting the users
-    drawUserLine(accounts);
+    if (drawUserLine(accounts)) {
+      return true;
+    }
 		
 		//var bounds = new google.maps.LatLngBounds(new google.maps.LatLng(-9/365220,startPoint),new google.maps.LatLng((-9+h)/365220,endPoint));
 		//create an options object
@@ -416,6 +422,14 @@ var UserList = function(){
       }
     });
     
+    $('.views-row').on('mouseover', function(){
+      $('.current-user .person').removeClass('active');
+    });
+    
+    $('.views-row').on('mouseout', function(){
+      $('.current-user .person').addClass('active');
+    });
+    
     $(window).resize(function(){
        waitForFinalEvent(function () {
           self.setVariables();
@@ -436,6 +450,7 @@ var UserList = function(){
   }
   
   self.fillUsers = function(){
+    // Fills the screen with user nodes as to not have any blank space
     if(self.slidesToShow > $(classes.node).length){
         var itemsToFetch = ( self.slidesToShow - $(".person").length );
       	if($(".logged-in").length){
@@ -576,7 +591,8 @@ var UserList = function(){
 	  $user = $(".current-user");
 	  if($user.length){
 	    self.goToUser($user);
-	  }
+	    $user.find('.person').addClass('active');
+	  } 
 	}
 	
 	return self;
