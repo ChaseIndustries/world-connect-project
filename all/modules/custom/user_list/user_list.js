@@ -31,9 +31,7 @@ var UserList = function(){
 	},
 	$,
 	markers = [],
-	defaultStyles,
 	centerMarker = false,
-	midpoint = false,
 	line = false,
 	slickSettings = {
   		swipeToSlide   : true,
@@ -51,12 +49,10 @@ var UserList = function(){
 		  /*disableDefaultUI: true,*/
 		 scrollwheel: false
 		},
-  prevZoom = mapSettings.zoom,
   scrollPane,
 	requests = {},
 	mapCenter,
   origSettings,
-  user_data = user_data || false,
   width,
   personWidth;
   
@@ -70,7 +66,8 @@ var UserList = function(){
 	
 	function initMap(){
 		/* 365,222 feet in 1 degree of latitude */
-		defaultStyles = [
+		// Set initial styles
+		mapSettings.styles = [
     {
       "featureType": "landscape.man_made",
       "stylers": [
@@ -99,7 +96,7 @@ var UserList = function(){
         { "visibility": "off" }
       ]
     }];
-		mapSettings.styles = defaultStyles;
+    // Set the center to 0,0
     mapSettings.center = new google.maps.LatLng(0,0);
     map = new google.maps.Map(document.getElementById("map"), mapSettings);
 		defaultZoom = map.getZoom();
@@ -107,20 +104,20 @@ var UserList = function(){
 		  $('.map-loader').fadeOut(500);
 		  self.fillUsers();
 		  initUserNodes(user_data);
+		  self.callback(self);
 		});
 		map.addListener("zoom_changed",function(){
-		  mapSettings.zoom = map.getZoom();
 		  changeIcons();		
 		});
 		//map.addListener("drag",hideOverlays);
-		var lineOpts=[],userMarkers=[],c = 0;
-		/*var equator = new google.maps.Polyline({zIndex:1,path:[new google.maps.LatLng(0, -180),new google.maps.LatLng(0, 0),new google.maps.LatLng(0, 180)],"map":map,strokeColor:"#ff0000",strokeWeight:2,strokeOpacity:.3});*/
-		/*var pm = new google.maps.Polyline({zIndex:1,path:[new google.maps.LatLng(-180, 0),new google.maps.LatLng(0, 0),new google.maps.LatLng(180, 0)],"map":map,strokeColor:"#ff0000",strokeWeight:2,strokeOpacity:.3});*/
-  		map.hideFeatures = function(){
-    		map.setOptions({ styles : defaultStyles });
-  		} 
-  		map.showFeatures = function(){
-    		map.setOptions({ styles : [
+		markers=[],
+		c = 0;
+		map.hideFeatures = function(){
+  		map.setOptions({ styles : mapSettings.styles });
+		} 
+		map.showFeatures = function(){
+		  
+      map.setOptions({ styles : [
         {
           "featureType": "landscape.man_made",
           "stylers": [
@@ -149,39 +146,14 @@ var UserList = function(){
             { "visibility": "on" }
           ]
         }]
-  		});
+    	}); 
   	}
 	}
-	self.setVariables = function(){
-	
-	  width              = $(window).width()
-    personWidth        = $(".person").width();
-    personWidth        = $(".person").width();
-    self.slidesToShow  = Math.floor(width/personWidth);
-    self.contentHeight = $(".content-wrapper").height();
-    self.footerHeight  = $(".footer__top").height() + $(".footer__bottom").height();
-    
-  }
   
   function logged_in(){
     return $(".current-user").length;
   }
-	
-	self.setPositions = function(){
-		var w = parseInt($(classes.list).find(classes.node).outerWidth());
-		var n = $(classes.list).find(classes.node).length;
-		
-		self.setVariables();
-		
-		//set height of view-next and view-prev
-		$(".view-next, .view-prev").css("height",$(classes.node).height());
-		
-    // Initialize the slick carousel
-		initSlick();
-		
-		$(".front-map").height(self.contentHeight - self.footerHeight);
-	}
-	
+  	
 	function initSlick(){
 	  if(!scrollPane){
   	  slickSettings.initialSlide = logged_in() ? $(".current-user").index(".views-row") : 1;
@@ -218,97 +190,127 @@ var UserList = function(){
 	function changeIcons(){
 	// when zoomed in, this changes the icons of the markers on the maps, depending
 	// on zoom level.  It's just a neat little feature.
-  	if(prevZoom == mapSettings.zoom){
-    	return false;
-  	}
-  	prevZoom = mapSettings.zoom;
-  	if(map.getZoom() > 12){      
+	  	
+  	var curZoom = map.getZoom();
+  	
+  	// Show features if zoom is past a certain amount
+  	if(curZoom > 12){
       map.showFeatures();
   	} else {
       map.hideFeatures();
     }
     
-  	if(map.getZoom() == 21){
+  	if(curZoom == 21){
     	//change the icons
     	for(i=0;i<markers.length;i++){
     	  markers[i].setIcon(theme_dir+"/images/marker_person_1.png");
       }
       
-  	} else if(map.getZoom() < 21){
-  	  for(i=0;i<markers.length;i++){
-      	markers[i].setIcon(theme_dir+"/images/dot_"+Math.ceil(Math.random()*4)+".png");
+  	} else if(curZoom < 21){
+  	
+  	  for(i=0;i < markers.length;i++){
+  	  console.log(self.user_data[i]);
+      	markers[i].setIcon(self.user_data[markers[i].index].icon);
       }
   	}
 	}
 	
 	function drawUserLine(accounts){
-    var armSpan = 5.5 //in feet,
-		startPoint=0,
-		endPoint=0.
-    startLatlng = new google.maps.LatLng(0,startPoint);
-		var armSpanMiles = armSpan/365222;
+    
+		self.line = { 
+		  startPoint  : 0,
+		  endPoint    : 0,
+		  line : false,
+    }
+    
+    var armSpan  = 5.5, //in feet,
+		armSpanMiles = armSpan/365222,
+		amount = 0;
 		
 		if(!$("#map").length || typeof(google) == "undefined"){ 
 		  console.log("Something went wrong"); 
 		  return false;
 		}
-		var geocoder = new google.maps.Geocoder();
-		var amount = 0;
+		
 		if(logged_in()){
 		  amount = totalRows["uids_less"] + totalRows["uids_greater"] + totalRows["logged_in"];
 		} else {
 		  amount = totalRows["list_users"]
 		}
 		for(var i=0;i<amount;i++){
-			endPoint += armSpanMiles;
+			self.line.endPoint += armSpanMiles;
 		}
-		endLatlng = new google.maps.LatLng(0,endPoint);
-    var lineOpts =  {
-    zIndex:2,
-    geodesic:true,
-    lineLength:endPoint,
-    path:[startLatlng,endLatlng],
-    strokeColor:"#ff0000",
-    map:map,strokeWeight:1,
-    strokeOpacity:1
+		
+		self.line.startLatLng = new google.maps.LatLng(0, self.line.startPoint);
+		self.line.endLatLng = new google.maps.LatLng(0, self.line.endPoint);
+    
+    self.line.options =  {
+      zIndex        : 2,
+      geodesic      : true,
+      lineLength    : self.line.endPoint,
+      path          : [self.line.startLatLng, self.line.endLatLng],
+      strokeColor   : "#ff0000",
+      map           : map,
+      strokeWeight  : 1,
+      strokeOpacity : 1
     };
-		if(line){
-		  line.setMap(null);
+    
+		if(self.line.line){
+		  self.line.line.setMap(null);
 		}
-		//draw the line
-		line = new google.maps.Polyline(lineOpts);
-		//find middle of line
-    midPoint = new google.maps.LatLng(startPoint / 2 , endPoint / 2);
-    map.setCenter(midPoint);
+		// Draw the line
+		self.line.line = new google.maps.Polyline(self.line.options);
+    
+    // Set the center to the beginning of the line, as to also center the
+    // marker on the screen
+    map.setCenter(self.line.startLatLng);
+    
     //add a marker there
     //remove center marker if it exists (since this may be a new line)
     if(centerMarker){
       centerMarker.setMap(null);
     }
-    centerMarker = new google.maps.Marker({position:startLatlng, map:map, cursor:'pointer', icon:theme_dir+"/images/start_arrow.png"});
+    centerMarker = new google.maps.Marker({ 
+      position : self.line.startLatLng, 
+      map      : map, 
+      cursor   :'pointer', 
+      icon : theme_dir+"/images/start_arrow.png"
+    });
     var zoomLine = function(){
-      if(map.getCenter() == midPoint){
-        if(map.getZoom() == 21){
-          map.setZoom(4);
-        } else {
-  		    map.setZoom(21);
-  		  }
-		  }
-		  map.panTo(midPoint);
-		  map.setCenter(midPoint);
-		  self.callback(self);
-		}
-    //make the marker zoom/center on click
+      // If the user has clicked the line to get to the startpoint, 
+      // fit the bounds to the start and endpoint of the line
+      // unless they are within 2 zoom levels of the startpoint
+      if(map.getCenter() == self.line.startLatLng || map.getZoom() <= parseInt(self.lineZoom) - 2 && map.getZoom() >= parseInt(self.lineZoom) + 2){
+        if(map.getCenter() == self.line.startLatLng) {
+          // If the zoom is set to the linezoom, set the zoom to 4,
+          // the default zoom
+          // else, fit the map within the start and endpoint of the line
+          var bounds = new google.maps.LatLngBounds(self.line.startLatLng, self.line.endLatLng);
+          map.fitBounds(bounds);
+          if(!self.lineZoom){
+            self.lineZoom = map.getZoom();
+          }
+    		} else {
+    		  map.setZoom(4);
+    		}	
+  		} else {
+    	  self.panToStart();
+      }
+    }
+    // Make the marker zoom/center on click
     google.maps.event.addListener(centerMarker, 'click', zoomLine);
-		//also make the line do that
-		google.maps.event.addListener(line, 'click', zoomLine);
-		//draw dotted lines from the main line to the user's lat/lng
-		endPoint = 0;
 		
+		// Also make the line do that
+		google.maps.event.addListener(self.line, 'click', zoomLine);
+		
+		// Draw dotted lines from the main line to every user on the page's lat/lng
+		endPoint = 0;
 		for(var i in accounts){
-			var user = accounts[i];
-      function drawConnectingLine(latlng, user){
+			var user = accounts[i];	
+			user.index = i;
+      user.drawConnectingLine = function(latlng){
   			//draw connecting line
+  			  var user = this;
 					var lon = latlng.lng();
 					var lineSymbol = {
 					  path: 'M 0,-1 0,1',
@@ -316,57 +318,72 @@ var UserList = function(){
 					  strokeWeight:1,
 					  scale: 3
 					};
-					//find the index 
+					//  
 					var idx = $(".person[rel='"+user.uid+"']").parents(".views-row").find(".views-field-counter .field-content").html();
-					user.connectLineCap = new google.maps.Marker({position:latlng,map:map,icon:theme_dir+"/images/dot_"+Math.ceil(Math.random()*4)+".png"});
-						google.maps.event.addListener(user.connectLineCap, 'click', function(){
-						  mapCenter = user.connectLineCap.getPosition();
-						  prevZoom = mapSettings.zoom;
-  						if(mapSettings.zoom == 21){
-  						  mapSettings.zoom = 4;
-              } else {
-                mapSettings.zoom = 21;
-              }
-              map.setZoom(mapSettings.zoom);
-              map.setCenter(mapCenter);
-          });
-					markers.push(user.connectLineCap);
-					var lineCoordinates = [latlng , new google.maps.LatLng(0, armSpanMiles * idx)],
-					infowindow =  new google.maps.InfoWindow({ content: '' });
-					user.connectLine = new google.maps.Polyline({
-						  path          : lineCoordinates,
-						  strokeOpacity : 0,
-						  strokeColor   : "#fff",
-						  zIndex        : 2,
-						  map : map,
-						  icons         : [{
-							  icon   : lineSymbol,
-							  offset : '0',
-							  repeat : '10px'
-						    }]
-					});
-					google.maps.event.addListener(user.connectLine, 'click', function(){
-					  if(map.getZoom() < 13){ 
-					    map.panTo(latlng);
-					    map.setCenter(latlng);
-					  }
-					});
+					
+					// Create a clickable 'cap' at the end of each user's line
+					user.icon = theme_dir+"/images/dot_"+Math.ceil(Math.random()*4)+".png";
+					user.connectLineCap = new google.maps.Marker({
+					  position : latlng,
+					  map      : map,
+					  icon     : user.icon
+				  });
+				  // Make the cap zoom into the user on click
+					google.maps.event.addListener(user.connectLineCap, 'click', function(){
+					  
+					  // Center the map on the user
+					  mapCenter = user.connectLineCap.getPosition();
+					  map.setCenter(mapCenter);
+					  
+					  // Zoom into the user
+					  // If the zoom is maxed, zoom back to the default (4)
+						if(mapSettings.zoom == 21){
+						  map.setZoom(4);
+            } else {
+              mapSettings.zoom = 21;
+              map.setZoom(21);
+            }
+        });
+        user.connectLineCap.index = user.index; 
+				markers.push(user.connectLineCap);
+				var lineCoordinates = [latlng , new google.maps.LatLng(0, armSpanMiles * idx)],
+				infowindow =  new google.maps.InfoWindow({ content: '' });
+				user.connectLine = new google.maps.Polyline({
+					  path          : lineCoordinates,
+					  strokeOpacity : 0,
+					  strokeColor   : "#fff",
+					  zIndex        : 2,
+					  map : map,
+					  icons         : [{
+						  icon   : lineSymbol,
+						  offset : '0',
+						  repeat : '10px'
+					  }]
+				});
+				google.maps.event.addListener(user.connectLine, 'click', function(){
+				  if(map.getZoom() < 13){ 
+				    map.panTo(latlng);
+				    map.setCenter(latlng);
+				  }
+				});
+				
+				return user;
 			}
-			
-      if(typeof(user["field_location"]["und"]) == 'object'){
-       var latlng = new google.maps.LatLng(user["field_location"]["und"][0]["lat"],user["field_location"]["und"][0]["lng"]);
+      if(typeof(user.field_location.und) == 'object'){
+
+       var latlng = new google.maps.LatLng(user.field_location.und[0].lat, user.field_location.und[0].lng);
+       
        if(typeof(user.connectLine) == "undefined"){
-        drawConnectingLine(latlng, user);
+         user.drawConnectingLine(latlng);
        }  
       }
-       if(i == accounts.length - 1){
-        return true;
-       }
+     if(i == accounts.length - 1){
+      return accounts;
+     }
 		} /* for i in accounts */
 	}
 	 
 	function initUserNodes(accounts){
-	  
 	  // If data is not supplied, fail
 		if(!accounts){
   		return false;
@@ -374,10 +391,6 @@ var UserList = function(){
 		
 		adjustScreen();
 		self.setPositions();
-		
-		if(!accounts && typeof(user_data) != "undefined"){
-  		accounts = user_data;
-		}
 
 		// Remove the initial dummy row used for measuring width
     if($(".initial").length){
@@ -386,10 +399,9 @@ var UserList = function(){
     
     // Draw the line on the map connecting the users
     if (drawUserLine(accounts)) {
-      return true;
+      return accounts;
     }
 		
-		//var bounds = new google.maps.LatLngBounds(new google.maps.LatLng(-9/365220,startPoint),new google.maps.LatLng((-9+h)/365220,endPoint));
 		//create an options object
 		//create line from origin to center of equator line (ie connection)	
 	} /* initUserNodes */
@@ -400,8 +412,38 @@ var UserList = function(){
   
   /* methods */
   
+  self.setVariables = function(){
+	
+	  width              = $(window).width()
+    personWidth        = $(".person").width();
+    personWidth        = $(".person").width();
+    self.slidesToShow  = Math.floor(width/personWidth);
+    self.contentHeight = $(".content-wrapper").height();
+    self.footerHeight  = $(".footer__top").height() + $(".footer__bottom").height();
+    self.lineZoom      = false;
+    self.line          = {};
+    
+  }
+	
+	self.setPositions = function(){
+		var w = parseInt($(classes.list).find(classes.node).outerWidth());
+		var n = $(classes.list).find(classes.node).length;
+		
+		self.setVariables();
+		
+		//set height of view-next and view-prev
+		$(".view-next, .view-prev").css("height",$(classes.node).height());
+		
+    // Initialize the slick carousel
+		initSlick();
+		
+		$(".front-map").height(self.contentHeight - self.footerHeight);
+	}
+
+  
   self.init = function(user_data, callback){
     self.callback = callback || function(){};
+    self.user_data = user_data;
     $ = jQuery.noConflict();
     self.setVariables();
     self.setPositions();
@@ -439,6 +481,11 @@ var UserList = function(){
           
        }, 200, "global");
     });
+  }
+  
+  self.panToStart = function(){
+    map.panTo(self.line.startLatLng);
+		map.setCenter(self.line.startLatLng);
   }
   
   // Called immediately after an svg loads, embedded
@@ -503,11 +550,11 @@ var UserList = function(){
         requests.fetchNextUsers = $.get('/ajax/nextusers/' + numItems + '/' + offset, function(result){
           if(result.accounts.length) {
             var accounts = result.accounts;
-            if(user_data){
+            if(self.user_data){
               //merge old user_data with this one
-              user_data = user_data.concat(accounts);
+              self.user_data = self.user_data.concat(self.accounts);
             } else {
-              user_data = accounts;
+              self.user_data = accounts;
             }
             var initial = $(".person.initial").length ? 1 : $(".person.new:first").closest(".slick-slide").attr("data-slick-index");
             //if accounts length isn't numItems per page, disable show more
@@ -528,7 +575,7 @@ var UserList = function(){
             }
             
             $(".view-next").css("margin-left","").removeClass("faded");
-            initUserNodes(user_data);
+            initUserNodes(self.user_data);
           }
         }, 'json');
     }, numItems * delay);
@@ -554,11 +601,11 @@ var UserList = function(){
           if(result.accounts.length){
             var accounts = result.accounts;    
             //merge old user_data with this one
-            if(user_data){
+            if(self.user_data){
               //merge old user_data with this one
-              user_data = accounts.concat(user_data);
+              self.user_data = accounts.concat(self.user_data);
             } else {
-              user_data = accounts;
+              self.user_data = accounts;
             }
             
             var count = 0;
@@ -568,7 +615,7 @@ var UserList = function(){
               count++;
             }
             $(".view-next").css("margin-left","").removeClass("faded");
-            initUserNodes(user_data);
+            initUserNodes(self.user_data);
           }
         }, 'json');
       },numItems * delay);
@@ -602,7 +649,7 @@ var user_list = new UserList();
 window.onload = function(){
 	var $ = jQuery.noConflict();
 	if(typeof(user_data)=="undefined"){
-  	//console.log("Did not get user data!");
+  	console.log("Did not get user data!");
   	return false;
 	}
 	user_list.init(user_data, function(){
