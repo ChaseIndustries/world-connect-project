@@ -103,7 +103,7 @@ var UserList = function(){
 		google.maps.event.addListenerOnce(map, 'idle', function(){
 		  $('.map-loader').fadeOut(500);
 		  self.fillUsers();
-		  initUserNodes(user_data);
+		  initUserNodes(self.user_data);
 		  self.callback(self);
 		});
 		map.addListener("zoom_changed",function(){
@@ -209,7 +209,6 @@ var UserList = function(){
   	} else if(curZoom < 21){
   	
   	  for(i=0;i < markers.length;i++){
-  	  console.log(self.user_data[i]);
       	markers[i].setIcon(self.user_data[markers[i].index].icon);
       }
   	}
@@ -242,7 +241,7 @@ var UserList = function(){
 		}
 		
 		self.line.startLatLng = new google.maps.LatLng(0, self.line.startPoint);
-		self.line.endLatLng = new google.maps.LatLng(0, self.line.endPoint);
+		self.line.endLatLng   = new google.maps.LatLng(0, self.line.endPoint);
     
     self.line.options =  {
       zIndex        : 2,
@@ -276,32 +275,11 @@ var UserList = function(){
       cursor   :'pointer', 
       icon : theme_dir+"/images/start_arrow.png"
     });
-    var zoomLine = function(){
-      // If the user has clicked the line to get to the startpoint, 
-      // fit the bounds to the start and endpoint of the line
-      // unless they are within 2 zoom levels of the startpoint
-      if(map.getCenter() == self.line.startLatLng || map.getZoom() <= parseInt(self.lineZoom) - 2 && map.getZoom() >= parseInt(self.lineZoom) + 2){
-        if(map.getCenter() == self.line.startLatLng) {
-          // If the zoom is set to the linezoom, set the zoom to 4,
-          // the default zoom
-          // else, fit the map within the start and endpoint of the line
-          var bounds = new google.maps.LatLngBounds(self.line.startLatLng, self.line.endLatLng);
-          map.fitBounds(bounds);
-          if(!self.lineZoom){
-            self.lineZoom = map.getZoom();
-          }
-    		} else {
-    		  map.setZoom(4);
-    		}	
-  		} else {
-    	  self.panToStart();
-      }
-    }
     // Make the marker zoom/center on click
-    google.maps.event.addListener(centerMarker, 'click', zoomLine);
+    google.maps.event.addListener(centerMarker, 'click', self.panToStart);
 		
 		// Also make the line do that
-		google.maps.event.addListener(self.line, 'click', zoomLine);
+		google.maps.event.addListener(self.line, 'click', self.zoomLine);
 		
 		// Draw dotted lines from the main line to every user on the page's lat/lng
 		endPoint = 0;
@@ -337,10 +315,11 @@ var UserList = function(){
 					  
 					  // Zoom into the user
 					  // If the zoom is maxed, zoom back to the default (4)
-						if(mapSettings.zoom == 21){
-						  map.setZoom(4);
+						var mapZoom = map.getZoom();
+						
+						if(mapZoom == 21){
+						  map.setZoom(mapSettings.zoom);
             } else {
-              mapSettings.zoom = 21;
               map.setZoom(21);
             }
         });
@@ -484,9 +463,37 @@ var UserList = function(){
   }
   
   self.panToStart = function(){
-    map.panTo(self.line.startLatLng);
-		map.setCenter(self.line.startLatLng);
+    var mapCenter = map.getCenter();
+    if(mapCenter == self.line.startLatLng){ 
+      self.zoomLine();
+    } else {
+      map.panTo(self.line.startLatLng);
+  		map.setCenter(self.line.startLatLng);
+    }
   }
+  
+  self.zoomLine = function(){
+      var mapZoom = parseInt(map.getZoom()),
+      mapCenter   = map.getCenter();
+      if (mapZoom != self.lineZoom || !self.lineZoom) {
+        // If the zoom is set to the linezoom, set the zoom to 4,
+        // the default zoom
+        // else, fit the map within the start and endpoint of the line
+        
+        // Set the center to be on the line
+        map.panTo( new google.maps.LatLng(0, mapCenter.lng()) );
+        if(!self.lineZoom) {
+          var bounds = new google.maps.LatLngBounds(self.line.startLatLng, self.line.endLatLng);
+          map.fitBounds(bounds);
+          // Set the linezoom to the map zoom
+          self.lineZoom = map.getZoom();
+        } else {
+          map.setZoom(self.lineZoom);
+        }
+  		} else {
+  		  map.setZoom(4);
+  		}	
+    }
   
   // Called immediately after an svg loads, embedded
   // in the <img /> tag

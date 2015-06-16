@@ -84,94 +84,99 @@ hr { border-color: #1d8c49; }
 .btn:hover { background: #ffbc0f; }
 
 /* line 237, ../sass/component.scss */
+.fb-login-button { background: #3d5be1; color: #fff; text-align: center; border-radius: 5px; border: 1px solid rgba(255, 255, 255, 0.7); text-decoration: none; font-weight: bold; margin: 5px 0; padding: 5px 10px; display: block; width: 200px; }
+/* line 249, ../sass/component.scss */
+.fb-login-button:hover a, .fb-login-button:focus a { text-decoration: none; }
+
+/* line 254, ../sass/component.scss */
 .person.user-profile.view-mode-full { font-size: .6em; }
-/* line 239, ../sass/component.scss */
+/* line 256, ../sass/component.scss */
 .person.user-profile.view-mode-full .person__body { width: 200px; }
 
-/* line 244, ../sass/component.scss */
+/* line 261, ../sass/component.scss */
 .modal { width: 100%; min-height: 100%; padding-bottom: 15px; position: absolute; left: 0; top: 0; content: ""; z-index: 100; overflow: auto; -moz-transition: all 0.3s; -o-transition: all 0.3s; -webkit-transition: all 0.3s; transition: all 0.3s; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; background: rgba(0, 0, 0, 0.4); }
-/* line 257, ../sass/component.scss */
+/* line 274, ../sass/component.scss */
 .modal.visible { display: block; }
-/* line 260, ../sass/component.scss */
-.modal.fade { filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false); opacity: 1; }
-/* line 263, ../sass/component.scss */
-.modal .modal__inner { position: absolute; left: 50%; top: 10%; -moz-transform: translateX(-50%); -ms-transform: translateX(-50%); -webkit-transform: translateX(-50%); transform: translateX(-50%); z-index: 200; background: #26B65F; font-size: .6em; max-width: 600px; width: 95%; }
-/* line 273, ../sass/component.scss */
-.modal .modal__inner .modal__content { padding: 30px 40px; overflow: auto; height: 100%; }
 /* line 277, ../sass/component.scss */
+.modal.fade { filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false); opacity: 1; }
+/* line 280, ../sass/component.scss */
+.modal .modal__inner { position: absolute; border: 1px solid #8ee7b1; left: 50%; top: 10%; -moz-transform: translateX(-50%); -ms-transform: translateX(-50%); -webkit-transform: translateX(-50%); transform: translateX(-50%); z-index: 200; background: #26B65F; font-size: .6em; max-width: 600px; width: 95%; }
+/* line 291, ../sass/component.scss */
+.modal .modal__inner .modal__content { padding: 30px 40px; overflow: auto; height: 100%; }
+/* line 295, ../sass/component.scss */
 .modal .modal__inner .modal__content h2 { display: inline; float: left; margin-bottom: 30px; }
-/* line 283, ../sass/component.scss */
-.modal .modal__inner .modal__close { display: inline-block; position: relative; right: 15px; top: 0; padding-left: 15px; float: right; font-size: 3em; color: #FFB800; }
-/* line 292, ../sass/component.scss */
-.modal .modal__inner .modal__close:hover { text-decoration: none; color: #ffc633; }
-/* line 298, ../sass/component.scss */
-.modal .messages-container { position: relative; margin-bottom: 15px; }
 /* line 301, ../sass/component.scss */
+.modal .modal__inner .modal__close { display: inline-block; position: relative; right: 15px; top: 0; padding-left: 15px; float: right; font-size: 3em; color: #FFB800; }
+/* line 310, ../sass/component.scss */
+.modal .modal__inner .modal__close:hover { text-decoration: none; color: #ffc633; }
+/* line 316, ../sass/component.scss */
+.modal .messages-container { position: relative; margin-bottom: 15px; }
+/* line 319, ../sass/component.scss */
 .modal .messages-container .alert-block { padding: 0; background: none; color: #fff; border: 0; }
-/* line 306, ../sass/component.scss */
+/* line 324, ../sass/component.scss */
 .modal .messages-container .alert-block::before { font-family: "Glyphicons Halflings"; content: "\e101"; margin-right: 5px; display: inline-block; color: #FFB800; }
-/* line 315, ../sass/component.scss */
+/* line 333, ../sass/component.scss */
 .modal .login-link { position: absolute; right: 15px; top: 15px; font-size: .8em; }
 
-/* line 325, ../sass/component.scss */
+/* line 343, ../sass/component.scss */
 .geolocation-html5-map { max-width: 100%; }
 
-/* line 329, ../sass/component.scss */
+/* line 347, ../sass/component.scss */
 .help-block { color: #fcf6be; font-size: .9em; }
 
-/* line 335, ../sass/component.scss */
+/* line 353, ../sass/component.scss */
 #user-login-form ul { list-style: none; padding-left: 0; margin-left: 0; }
 
-/* line 342, ../sass/component.scss */
+/* line 360, ../sass/component.scss */
 .password-suggestions, .password-strength, .password-confirm { font-size: .8em; }
 
-/* line 346, ../sass/component.scss */
+/* line 364, ../sass/component.scss */
 .colorpicker-placeholder { position: relative; width: 50px; height: 50px; background: #fff; margin: auto; }
 
-/* line 354, ../sass/component.scss */
+/* line 372, ../sass/component.scss */
 input.colorpicker-element { height: 1px; padding: 0; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; width: 60px; margin: auto; }
 
-/* line 362, ../sass/component.scss */
+/* line 380, ../sass/component.scss */
 .messages-container { position: absolute; top: 0; left: 0; width: 100%; padding: 10px 0; z-index: 1000; }
 
-/* line 371, ../sass/component.scss */
+/* line 389, ../sass/component.scss */
 .form-group { margin-bottom: 20px; }
 
-/* line 374, ../sass/component.scss */
+/* line 392, ../sass/component.scss */
 .form-control { font-size: 1.2em; height: auto; padding: 10px 10px; }
 
-/* line 380, ../sass/component.scss */
+/* line 398, ../sass/component.scss */
 fieldset.panel { background: transparent; border: 0; -moz-box-shadow: 0; -webkit-box-shadow: 0; box-shadow: 0; }
-/* line 384, ../sass/component.scss */
+/* line 402, ../sass/component.scss */
 fieldset.panel .panel-heading { background: transparent; color: #95E2E5; padding: 0; border: 0; }
-/* line 389, ../sass/component.scss */
+/* line 407, ../sass/component.scss */
 fieldset.panel .panel-heading .panel-title { font-size: 1.2em; text-transform: capitalize; }
-/* line 394, ../sass/component.scss */
+/* line 412, ../sass/component.scss */
 fieldset.panel .panel-body { padding: 0; }
 
-/* line 399, ../sass/component.scss */
+/* line 417, ../sass/component.scss */
 .group-custom { display: table; }
-/* line 401, ../sass/component.scss */
+/* line 419, ../sass/component.scss */
 .group-custom .field-type-color-field-rgb { display: table-cell; white-space: nowrap; padding: 0 5px; text-align: center; }
-/* line 406, ../sass/component.scss */
+/* line 424, ../sass/component.scss */
 .group-custom .field-type-color-field-rgb label { font-size: .9em; text-align: center; }
 
-/* line 416, ../sass/component.scss */
+/* line 434, ../sass/component.scss */
 .form-control.error { background: white; border: 1px solid red; }
 
-/* line 421, ../sass/component.scss */
+/* line 439, ../sass/component.scss */
 .messages.error.messages-inline { color: #fff; margin-top: -15px; padding: 0; margin-bottom: 15px; }
-/* line 426, ../sass/component.scss */
+/* line 444, ../sass/component.scss */
 .messages.error.messages-inline::before { font-family: "Glyphicons Halflings"; content: "\e101"; margin-right: 5px; display: inline-block; color: #FFB800; }
 
-/* line 435, ../sass/component.scss */
+/* line 453, ../sass/component.scss */
 .page-title { margin-bottom: 30px; }
 
-/* line 438, ../sass/component.scss */
+/* line 456, ../sass/component.scss */
 .form-checkbox { position: relative; margin-left: 0; margin-right: 5px; }
 
-/* line 443, ../sass/component.scss */
+/* line 461, ../sass/component.scss */
 .slick-slider { margin-bottom: 0; }
 
-/* line 447, ../sass/component.scss */
+/* line 465, ../sass/component.scss */
 .slick-track .slick-ground { content: ""; position: absolute; left: 50%; -moz-transform: translateX(-50%); -ms-transform: translateX(-50%); -webkit-transform: translateX(-50%); transform: translateX(-50%); bottom: -9px; height: 30px; background: url("../images/ground.png") repeat-x top left; }

@@ -21,9 +21,15 @@ function user_list_views_api() {
  */
 function user_list_theme($existing, $type, $theme, $path){
   return array(
-    "preprocess functions"=>array("user_list_preprocess_views_view"),
-    "man_svg" => array(
-      'template' => '/templates/man_svg',
+    "preprocess functions"=> array("user_list_preprocess_views_view"),
+    "male_svg" => array(
+      'template' => '/templates/male_svg',
+      'variables' => array(
+        'user' => NULL,
+      ),
+    ),
+    "female_svg" => array(
+      'template' => '/templates/female_svg',
       'variables' => array(
         'user' => NULL,
       ),
@@ -156,6 +162,8 @@ function user_list_page_build(&$page) {
 
 function user_list_generate_svg($uid = NULL){
   $user = user_load($uid);
-  return theme('man_svg', array('user' => $user ));
+  if(!$user){ die('no user in module'); }
+  $gender = count($user->field_gender) ? $user->field_gender[LANGUAGE_NONE][0]['value'] : 'male';
+  return theme($gender . '_svg', array('user' => $user ));
 }
 

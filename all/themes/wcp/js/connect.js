@@ -40,6 +40,9 @@
       setTimeout(function(){
         $(".login-register").toggleClass("fade");
       },1);
+      
+      //set the url to #join-the-chain
+      window.location.href = '#join-the-chain';
   }
   $(".js__login-register__toggle").on("click", function(){
       toggleModal();
@@ -65,13 +68,23 @@
       $(".front-map").height(vars.contentHeight - vars.footerHeight);
       //$(".region-content").css({minHeight: $(".content-wrapper").height() - $(".front-map").height()});
     }
-    $(window, context).resize(function(){
+    $(window, context).resize(function() {
       initPage();
     });
     
-    $(window, context).on('load', function(){
+    $(window, context).on('load', function() {
       initPage();
-    })
+      window.onhashchange();
+    });
+    
+    window.onhashchange  = function() {
+      var hash = window.location.hash;
+      switch(hash) {
+        case '#join-the-chain':
+          toggleModal();
+        break;
+      }
+    }
   }
 };
   
