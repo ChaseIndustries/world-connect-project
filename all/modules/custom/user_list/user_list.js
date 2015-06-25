@@ -284,7 +284,8 @@ var UserList = function(){
 		// Draw dotted lines from the main line to every user on the page's lat/lng
 		endPoint = 0;
 		for(var i in accounts){
-			var user = accounts[i];	
+			var user = accounts[i];
+			if(typeof(user) !== 'object') { continue; }
 			user.index = i;
       user.drawConnectingLine = function(latlng){
   			//draw connecting line
