@@ -182,8 +182,8 @@ fieldset.panel .panel-body { padding: 0; }
 .slick-track .slick-ground { content: ""; position: absolute; left: 50%; -moz-transform: translateX(-50%); -ms-transform: translateX(-50%); -webkit-transform: translateX(-50%); transform: translateX(-50%); bottom: -9px; height: 30px; background: url("../images/ground.png") repeat-x top left; }
 
 /* line 474, ../sass/component.scss */
-.people-container { position: absolute; right: 15px; bottom: 50px; width: 182px; height: 178px; }
+.people-container { position: absolute; right: 15px; bottom: 50px; width: 188px; height: 178px; }
 /* line 480, ../sass/component.scss */
-.people-container .person { display: none; width: 100%; }
+.people-container .person-form { display: none; width: 100%; }
 /* line 484, ../sass/component.scss */
-.people-container .person.visible { display: block; }
+.people-container .person-form.visible { display: block; }

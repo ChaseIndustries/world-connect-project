@@ -26,7 +26,7 @@ function loadSvg(svg) {
       var picker = $self.colorpicker().on("changeColor.colorpicker", function(event){
         var color = event.color.toHex();
         $(".colorpicker-placeholder").eq(i).css({"background-color":color});
-        var svgObj = people[$('.person.visible').attr('id')];
+        var svgObj = people[$('.person-form.visible').attr('id')];
         fillPerson(svgObj);
       });
       $self.on("keypress", function(e){
@@ -131,15 +131,15 @@ function loadSvg(svg) {
       fillPlaceholders();
       //Êon load show the peopel in the register form depending on what is filled out
       if ($('#edit-field-gender-und-male').prop('checked')) {
-        $('.login-register.modal .person.male').addClass('visible');
+        $('.login-register.modal .person-form.male').addClass('visible');
       } else {
-        $('.login-register.modal .person.female').addClass('visible');
+        $('.login-register.modal .person-form.female').addClass('visible');
       }
       
       $('#edit-field-gender-und-male').change(function() {        
-        var el = $('.login-register.modal .person.male');
+        var el = $('.login-register.modal .person-form.male');
         el.addClass('visible');
-        $('.login-register.modal .person.female').removeClass('visible'); 
+        $('.login-register.modal .person-form.female').removeClass('visible'); 
         $('.form-item-field-pants-color-und-0-rgb').show();
         var svgObj = people[el.attr('id')];
         if(svgObj) {
@@ -148,10 +148,10 @@ function loadSvg(svg) {
       });
     
       $('#edit-field-gender-und-female').change(function() {
-        var el = $('.login-register.modal .person.female');
+        var el = $('.login-register.modal .person-form.female');
         el.addClass('visible');
         $('.form-item-field-pants-color-und-0-rgb').hide();
-        $('.login-register.modal .person.male').removeClass('visible'); 
+        $('.login-register.modal .person-form.male').removeClass('visible'); 
         
         var svgObj = people[el.attr('id')];
         if(svgObj) {
@@ -159,7 +159,7 @@ function loadSvg(svg) {
         }
       });
       
-      var svgObj = people[$('.person.visible').attr('id')];
+      var svgObj = people[$('.person-form.visible').attr('id')];
       if(svgObj) {
         fillPerson(svgObj);
       }

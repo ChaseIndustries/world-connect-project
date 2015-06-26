@@ -105,8 +105,8 @@ if(!$logged_in || $is_admin){ ?>
     		    <? $register_form = drupal_get_form('user_register_form'); ?>
     		    <? print(drupal_render($register_form)); ?>
       		    <div class='people-container'>
-      		      <object id="svg_person_male" type="image/svg+xml" onload="loadSvg(this)"class="person male" data="<?php print base_path() . drupal_get_path('module', 'user_list') ?>/images/people/male.svg"></object>
-      		      <object id="svg_person_female" type="image/svg+xml" onload="loadSvg(this)" class='person female' data='<?php print base_path() . drupal_get_path('module', 'user_list') ?>/images/people/female.svg'/></object>
+      		      <object id="svg_person_male" type="image/svg+xml" onload="loadSvg(this)"class="person-form male" data="<?php print base_path() . drupal_get_path('module', 'user_list') ?>/images/people/male.svg"></object>
+      		      <object id="svg_person_female" type="image/svg+xml" onload="loadSvg(this)" class='person-form female' data='<?php print base_path() . drupal_get_path('module', 'user_list') ?>/images/people/female.svg'/></object>
       		    </div>
     		    </div>
   		    </div>

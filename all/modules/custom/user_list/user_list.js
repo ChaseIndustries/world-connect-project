@@ -284,8 +284,9 @@ var UserList = function(){
 		// Draw dotted lines from the main line to every user on the page's lat/lng
 		endPoint = 0;
 		for(var i in accounts){
+		console.log(accounts);
 			var user = accounts[i];
-			if(typeof(user) !== 'object') { continue; }
+			if(typeof(user) == 'undefined') { console.log('test'); continue; }
 			user.index = i;
       user.drawConnectingLine = function(latlng){
   			//draw connecting line
@@ -307,22 +308,24 @@ var UserList = function(){
 					  map      : map,
 					  icon     : user.icon
 				  });
+				  
 				  // Make the cap zoom into the user on click
 					google.maps.event.addListener(user.connectLineCap, 'click', function(){
 					  
-					  // Center the map on the user
-					  mapCenter = user.connectLineCap.getPosition();
-					  map.setCenter(mapCenter);
-					  
-					  // Zoom into the user
-					  // If the zoom is maxed, zoom back to the default (4)
-						var mapZoom = map.getZoom();
-						
-						if(mapZoom == 21){
-						  map.setZoom(mapSettings.zoom);
-            } else {
-              map.setZoom(21);
-            }
+				  // Center the map on the user
+				  mapCenter = user.connectLineCap.getPosition();
+				  map.setCenter(mapCenter);
+				  
+				  // Zoom into the user
+				  // If the zoom is maxed, zoom back to the default (4)
+					var mapZoom = map.getZoom();
+					
+					if(mapZoom == 21){
+					  map.setZoom(mapSettings.zoom);
+          } 
+          else {
+            map.setZoom(21);
+          }
         });
         user.connectLineCap.index = user.index; 
 				markers.push(user.connectLineCap);
@@ -394,13 +397,12 @@ var UserList = function(){
   
   self.setVariables = function(){
 	
-	  width              = $(window).width()
-    personWidth        = $(".person").width();
-    personWidth        = $(".person").width();
-    self.slidesToShow  = Math.floor(width/personWidth);
-    self.contentHeight = $(".content-wrapper").height();
-    self.footerHeight  = $(".footer__top").height() + $(".footer__bottom").height();
-    self.lineZoom      = false;
+	  width              = $(window).width(),
+    personWidth        = $(".person").width(),
+    self.slidesToShow  = Math.floor(width/personWidth),
+    self.contentHeight = $(".content-wrapper").height(),
+    self.footerHeight  = $(".footer__top").height() + $(".footer__bottom").height(),
+    self.lineZoom      = false,
     self.line          = {};
     
   }
