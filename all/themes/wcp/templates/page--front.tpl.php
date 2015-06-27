@@ -97,10 +97,11 @@ if(!$logged_in || $is_admin){ ?>
             </div>
             <?php } ?>
     		    <div class="col-sm-12 login-register__register">
+<!--
     		    		      <label>Login with Facebook:</label>
 		      <div class='fb-login-button'><a href='/user/simple-fb-connect'>Connect with Facebook</a></div>
-<div id="status">
-</div>
+-->
+          <div id="status"></div>
           <br>
     		    <? $register_form = drupal_get_form('user_register_form'); ?>
     		    <? print(drupal_render($register_form)); ?>
