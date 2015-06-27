@@ -99,8 +99,8 @@ var UserList = function(){
     // Set the center to 0,0
     mapSettings.center = new google.maps.LatLng(0,0);
     map = new google.maps.Map(document.getElementById("map"), mapSettings);
-		defaultZoom = map.getZoom();
 		google.maps.event.addListenerOnce(map, 'idle', function(){
+		  defaultZoom = map.getZoom();
 		  $('.map-loader').fadeOut(500);
 		  self.fillUsers();
 		  initUserNodes(self.user_data);
@@ -284,9 +284,8 @@ var UserList = function(){
 		// Draw dotted lines from the main line to every user on the page's lat/lng
 		endPoint = 0;
 		for(var i in accounts){
-		console.log(accounts);
 			var user = accounts[i];
-			if(typeof(user) == 'undefined') { console.log('test'); continue; }
+			if(typeof(user) == 'undefined') { continue; }
 			user.index = i;
       user.drawConnectingLine = function(latlng){
   			//draw connecting line
@@ -405,6 +404,15 @@ var UserList = function(){
     self.lineZoom      = false,
     self.line          = {};
     
+    if (typeof(totalRows.logged_in) != 'undefined') {
+      if (self.slidesToShow > totalRows.uids_less + totalRows.uids_greater) { 
+        self.slidesToShow = totalRows.uids_less + totalRows.uids_greater + 1;
+        $('.view-next, .view-prev').hide();
+      }
+    } else if (self.slidesToShow > totalRows.list_users) {
+        self.slidesToShow = totalRows.list_users;
+        $('.view-next, .view-prev').hide();
+    }
   }
 	
 	self.setPositions = function(){
