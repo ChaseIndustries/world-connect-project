@@ -39,7 +39,8 @@ var UserList = function(){
   		infinite       : false,
   		centerMode     : true,
   		arrows         : false,
-      slidesToScroll : 1
+      slidesToScroll : 1,
+      variableWidth: true
   },
   mapSettings = {
 		  zoom: 4,
@@ -153,6 +154,14 @@ var UserList = function(){
   function logged_in(){
     return $(".current-user").length;
   }
+  
+ function totalUsers() { 
+    if (logged_in()) {
+      return totalRows.uids_less + totalRows.uids_greater + totalRows.logged_in;
+    } else if (self.slidesToShow > totalRows.list_users) {
+      return totalRows.list_users;
+    }
+  }
   	
 	function initSlick(){
 	  if(!scrollPane){
@@ -166,15 +175,19 @@ var UserList = function(){
           $(".view-prev").addClass("disabled");
         }
     		scrollPane = $(classes.list).find(".view-content").slick(slickSettings);
+    		$('.slick-slide').width($('.person:eq(0)').width());
     		scrollPane.on('afterChange', function(slick, currentSlide){
     		  var curSlide = scrollPane.slick("slickCurrentSlide");
-      		if(scrollPane.slick("slickCurrentSlide") + 1 == $(classes.node).length){
+      		if(scrollPane.slick("slickCurrentSlide") + 1 == $(classes.node).length && totalUsers() < $(classes.node).length){
         		//ajax
         		if(!requests.fetchNextUsers && !requests.fetchPrevUsers){
           		self.fetchNextUsers(self.slidesToShow);
         		}
       		}
     		});
+        scrollPane.on('init' , function(slick) {
+          $('.slick-slide').width($('.person:eq(0)').width());
+        });
         
         // On initialization
         scrollPane.on('reInit', function(slick){
@@ -404,16 +417,18 @@ var UserList = function(){
     self.lineZoom      = false,
     self.line          = {};
     
-    if (typeof(totalRows.logged_in) != 'undefined') {
+    if (logged_in()) {
       if (self.slidesToShow > totalRows.uids_less + totalRows.uids_greater) { 
-        self.slidesToShow = totalRows.uids_less + totalRows.uids_greater + 1;
+        self.slidesToShow = totalUsers();
         $('.view-next, .view-prev').hide();
       }
     } else if (self.slidesToShow > totalRows.list_users) {
-        self.slidesToShow = totalRows.list_users;
+        self.slidesToShow = totalUsers();
         $('.view-next, .view-prev').hide();
     }
   }
+  
+ 
 	
 	self.setPositions = function(){
 		var w = parseInt($(classes.list).find(classes.node).outerWidth());
